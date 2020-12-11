@@ -1,0 +1,91 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--
+    <TargetFrameworks>netstandard2.0;netstandard1.5;net40;portable-net45+sl5+win8+wp8</TargetFrameworks>
+    <TargetFrameworks Condition="'$(WithoutCrossCompile)' != ''">netstandard2.0</TargetFrameworks>
+    <Description>(pronounced dyna-mighty) flexes DLR muscle to do meta-mazing things in .net</Description>
+    <Company>Ekon Benefits</Company>
+    <Authors />
+    <PackageProjectUrl>https://github.com/ekonbenefits/dynamitey</PackageProjectUrl>
+    <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+    <PackageTags>dynamic metaprogramming dlr reflection currying tuples expando latetypes</PackageTags>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>False</DelaySign>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <IncludeSymbols>True</IncludeSymbols>
+    <IncludeSource>True</IncludeSource>
+    <VersionPrefix>2.0.10</VersionPrefix>
+    -->
+    <TargetFrameworks>net472;netcoreapp3.1;net5.0</TargetFrameworks>    
+    <Copyright>Copyright 2017 Ekon Benefits</Copyright>
+  </PropertyGroup>
+
+
+  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
+    <PackageReference Include="Microsoft.CSharp" Version="4.*" />
+    <PackageReference Include="System.ComponentModel" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net5.0'">
+    <PackageReference Include="Microsoft.CSharp" Version="4.*" />
+    <PackageReference Include="System.ComponentModel" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net472'">
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="sn.snk" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="InlineLambdas.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>InlineLambdas.cs</LastGenOutput>
+    </None>
+    <None Update="Internal\Optimization\InvokeHelper.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>InvokeHelper.cs</LastGenOutput>
+    </None>
+    <None Update="ThisFunctions.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ThisFunctions.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="InlineLambdas.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>InlineLambdas.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Internal\Optimization\InvokeHelper.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>InvokeHelper.tt</DependentUpon>
+    </Compile>
+    <Compile Update="ThisFunctions.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ThisFunctions.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.0.5" PrivateAssets="all" />
+    -->
+    <PackageReference Include="MSBuild.Sdk.Extras" Version="3.0.22" PrivateAssets="all" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
+
+</Project>

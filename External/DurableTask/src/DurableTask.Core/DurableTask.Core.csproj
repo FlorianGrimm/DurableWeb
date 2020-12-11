@@ -1,0 +1,99 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+<!--
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory),DurableTask.sln))\tools\DurableTask.props" />
+-->
+  <PropertyGroup>
+    <!--
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    
+    <TargetFrameworks>net472</TargetFrameworks>
+    -->
+    <TargetFrameworks>net472;netcoreapp3.1;net5.0</TargetFrameworks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PackageId>Microsoft.Azure.DurableTask.Core</PackageId>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <!--NuGet licenseUrl and PackageIconUrl/iconUrl deprecation. -->
+    <NoWarn>NU5125;NU5048</NoWarn>
+    <DefineConstants>Trace</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
+    <JsonSerializerSettingsBinder>JsonBinder</JsonSerializerSettingsBinder>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <JsonSerializerSettingsBinder>SerializationBinder</JsonSerializerSettingsBinder>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net5.0'">
+    <JsonSerializerSettingsBinder>SerializationBinder</JsonSerializerSettingsBinder>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);$(JsonSerializerSettingsBinder)</DefineConstants>
+  </PropertyGroup>
+<!--
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="1.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="7.0.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+-->
+  
+  <ItemGroup Condition="'$(TargetFramework)'=='net472'">
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
+    <PackageReference Include="System.Reflection.Emit" Version="4.3.*" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.*" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net5.0'">
+    <PackageReference Include="System.Reflection.Emit" Version="4.3.*" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.*" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="System.Reactive.Core" Version="3.1.1" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="4.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Dynamitey\InlineLambdas.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>InlineLambdas.cs</LastGenOutput>
+    </None>
+    <None Update="Dynamitey\Internal\Optimization\InvokeHelper.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>InvokeHelper.cs</LastGenOutput>
+    </None>
+    <None Update="Dynamitey\ThisFunctions.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ThisFunctions.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Dynamitey\InlineLambdas.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>InlineLambdas.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Dynamitey\Internal\Optimization\InvokeHelper.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>InvokeHelper.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Dynamitey\ThisFunctions.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ThisFunctions.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  
+</Project>
