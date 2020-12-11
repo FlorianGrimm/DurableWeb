@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DurableWebApplication</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <div class="header">
+            <div class="sides">
+                <a asp-area="" asp-page="/Index">Home</a>
+                <a asp-area="" asp-page="/Privacy">Privacy</a>
+            </div>                
+        </div>
+    </header>
+    
+    <section class="content">
+        @RenderBody()
+    </section>
+
+    <footer >
+            &copy; 2020 - DurableWebApplication - <a asp-area="" asp-page="/Privacy">Privacy</a>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\External\DurableTask\src\DurableTask.Core\DurableTask.Core.csproj" />
+    <ProjectReference Include="..\DurableTask.WebBase\DurableTask.WebBase.csproj" />
+    <ProjectReference Include="..\DurableWebAppContracts\DurableWebAppContracts.csproj" />
+  </ItemGroup>
+
+</Project>
