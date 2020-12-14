@@ -36,7 +36,7 @@ namespace Dynamitey.DynamicObjects
         /// </summary>
         public Recorder():base(new Dummy())
         {
-            Recording = new List<Invocation>();
+            this.Recording = new List<Invocation>();
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Dynamitey.DynamicObjects
         /// <param name="target">The target.</param>
         public Recorder(object target) : base(target)
         {
-            Recording = new List<Invocation>();
+            this.Recording = new List<Invocation>();
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Dynamitey.DynamicObjects
         /// <param name="target">The target.</param>
         public T ReplayOn<T>(T target)
         {
-            foreach (var tInvocation in Recording)
+            foreach (var tInvocation in this.Recording)
             {
                 tInvocation.InvokeWithStoredArgs(target);
             }
@@ -81,7 +81,7 @@ namespace Dynamitey.DynamicObjects
         {
             if (base.TryGetMember(binder, out result))
             {
-                Recording.Add(new Invocation(InvocationKind.Get,binder.Name));
+                this.Recording.Add(new Invocation(InvocationKind.Get,binder.Name));
                 return true;
             }
             return false;
@@ -97,7 +97,7 @@ namespace Dynamitey.DynamicObjects
         {
             if (base.TrySetMember(binder, value))
             {
-                Recording.Add(new Invocation(InvocationKind.Set,binder.Name,value));
+                this.Recording.Add(new Invocation(InvocationKind.Set,binder.Name,value));
                 return true;
             }
             return false;
@@ -114,7 +114,7 @@ namespace Dynamitey.DynamicObjects
         {
             if (base.TryInvokeMember(binder, args, out result))
             {
-                Recording.Add(new Invocation(InvocationKind.InvokeMemberUnknown, binder.Name, Util.NameArgsIfNecessary(binder.CallInfo, args)));
+                this.Recording.Add(new Invocation(InvocationKind.InvokeMemberUnknown, binder.Name, Util.NameArgsIfNecessary(binder.CallInfo, args)));
                 return true;
             }
             return false;
@@ -131,7 +131,7 @@ namespace Dynamitey.DynamicObjects
         {
             if (base.TryGetIndex(binder, indexes, out result))
             {
-                Recording.Add(new Invocation(InvocationKind.GetIndex, Invocation.IndexBinderName, Util.NameArgsIfNecessary(binder.CallInfo, indexes)));
+                this.Recording.Add(new Invocation(InvocationKind.GetIndex, Invocation.IndexBinderName, Util.NameArgsIfNecessary(binder.CallInfo, indexes)));
                 return true;
             }
             return false;
@@ -149,7 +149,7 @@ namespace Dynamitey.DynamicObjects
             if (base.TrySetIndex(binder, indexes, value))
             {
                 var tCombinedArgs = indexes.Concat(new[] { value }).ToArray();
-                Recording.Add(new Invocation(InvocationKind.GetIndex, Invocation.IndexBinderName, Util.NameArgsIfNecessary(binder.CallInfo, tCombinedArgs)));
+                this.Recording.Add(new Invocation(InvocationKind.GetIndex, Invocation.IndexBinderName, Util.NameArgsIfNecessary(binder.CallInfo, tCombinedArgs)));
                 return true;
             }
             return false;

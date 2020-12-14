@@ -46,14 +46,14 @@ namespace Dynamitey.DynamicObjects
         {
             if (dict == null)
             {
-                _dictionary = new Dictionary<string, object>();
+                this._dictionary = new Dictionary<string, object>();
                 return;
             }
 
             if(dict is IDictionary<string,object>) //Don't need to enumerate if it's the right type.
-                _dictionary = (IDictionary<string,object>)dict;
+                this._dictionary = (IDictionary<string,object>)dict;
             else
-                _dictionary = dict.ToDictionary(k => k.Key, v => v.Value);
+                this._dictionary = dict.ToDictionary(k => k.Key, v => v.Value);
         }
 
         /// <summary>
@@ -68,13 +68,13 @@ namespace Dynamitey.DynamicObjects
         /// Gets the keys.
         /// </summary>
         /// <value>The keys.</value>
-        public ICollection<string> Keys => _dictionary.Keys;
+        public ICollection<string> Keys => this._dictionary.Keys;
 
         /// <summary>
         /// Gets the values.
         /// </summary>
         /// <value>The values.</value>
-        public ICollection<object> Values => _dictionary.Values;
+        public ICollection<object> Values => this._dictionary.Values;
 
         /// <summary>
         /// Returns the enumeration of all dynamic member names.
@@ -84,7 +84,7 @@ namespace Dynamitey.DynamicObjects
         /// </returns>
         public override IEnumerable<string> GetDynamicMemberNames()
         {
-            return base.GetDynamicMemberNames().Concat(_dictionary.Keys).Distinct();
+            return base.GetDynamicMemberNames().Concat(this._dictionary.Keys).Distinct();
         }
    
 
@@ -99,7 +99,7 @@ namespace Dynamitey.DynamicObjects
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
 
-            if (_dictionary.TryGetValue(binder.Name, out result))
+            if (this._dictionary.TryGetValue(binder.Name, out result))
             {
                 return this.MassageResultBasedOnInterface(binder.Name, true, ref result);
             }
@@ -119,7 +119,7 @@ namespace Dynamitey.DynamicObjects
         /// </returns>
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
-            if (_dictionary.TryGetValue(binder.Name, out result))
+            if (this._dictionary.TryGetValue(binder.Name, out result))
             {
                 var tFunc = result as Delegate;
                 if (result == null)
@@ -167,8 +167,8 @@ namespace Dynamitey.DynamicObjects
         /// </returns>
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-       
-            SetProperty(binder.Name,value);
+
+            this.SetProperty(binder.Name,value);
             return true;
         }
 
@@ -178,7 +178,7 @@ namespace Dynamitey.DynamicObjects
         /// <param name="item">The item.</param>
         public void Add(KeyValuePair<string, object> item)
         {
-            SetProperty(item.Key, item.Value);
+            this.SetProperty(item.Key, item.Value);
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace Dynamitey.DynamicObjects
         /// </returns>
         public bool Contains(KeyValuePair<string, object> item)
         {
-            return _dictionary.Contains(item);
+            return this._dictionary.Contains(item);
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace Dynamitey.DynamicObjects
         /// <param name="arrayIndex">Index of the array.</param>
         public void CopyTo(KeyValuePair<string, object>[] array, int arrayIndex)
         {
-            _dictionary.CopyTo(array,arrayIndex);
+            this._dictionary.CopyTo(array,arrayIndex);
         }
 
         /// <summary>
@@ -210,11 +210,11 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public bool Remove(KeyValuePair<string, object> item)
         {
-            if (TryGetValue(item.Key, out var tValue))
+            if (this.TryGetValue(item.Key, out var tValue))
             {
                 if (item.Value == tValue)
                 {
-                    Remove(item.Key);
+                    this.Remove(item.Key);
                 }
             }
             return false;
@@ -229,7 +229,7 @@ namespace Dynamitey.DynamicObjects
         /// </returns>
         public bool ContainsKey(string key)
         {
-            return _dictionary.ContainsKey(key);
+            return this._dictionary.ContainsKey(key);
         }
 
         /// <summary>
@@ -239,7 +239,7 @@ namespace Dynamitey.DynamicObjects
         /// <param name="value">The value.</param>
         public void Add(string key, object value)
         {
-            SetProperty(key,value);
+            this.SetProperty(key,value);
         }
 
         /// <summary>
@@ -249,8 +249,8 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public bool Remove(string key)
         {
-            var tReturn = _dictionary.Remove(key);
-            OnPropertyChanged(key);
+            var tReturn = this._dictionary.Remove(key);
+            this.OnPropertyChanged(key);
             return tReturn;
         }
 
@@ -262,7 +262,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public bool TryGetValue(string key, out object value)
         {
-            return _dictionary.TryGetValue(key, out value);
+            return this._dictionary.TryGetValue(key, out value);
         }
 
 
@@ -274,10 +274,10 @@ namespace Dynamitey.DynamicObjects
         /// <param name="value">The value.</param>
         protected void SetProperty(string key, object value)
         {
-            if (!_dictionary.TryGetValue(key, out var tOldValue) || value != tOldValue)
+            if (!this._dictionary.TryGetValue(key, out var tOldValue) || value != tOldValue)
             {
-                _dictionary[key] = value;
-                OnPropertyChanged(key);
+                this._dictionary[key] = value;
+                this.OnPropertyChanged(key);
             }
         }
 
@@ -308,7 +308,7 @@ namespace Dynamitey.DynamicObjects
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(other._dictionary, _dictionary);
+            return Equals(other._dictionary, this._dictionary);
         }
 
         /// <summary>
@@ -322,8 +322,8 @@ namespace Dynamitey.DynamicObjects
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof (Dictionary)) return _dictionary.Equals(obj);
-            return Equals((Dictionary) ((object) ((Dictionary) obj)));
+            if (obj.GetType() != typeof (Dictionary)) return this._dictionary.Equals(obj);
+            return this.Equals((Dictionary) ((object) ((Dictionary) obj)));
         }
 
         /// <summary>
@@ -334,7 +334,7 @@ namespace Dynamitey.DynamicObjects
         /// </returns>
         public override int GetHashCode()
         {
-            return _dictionary.GetHashCode();
+            return this._dictionary.GetHashCode();
         }
 
         /// <summary>
@@ -345,7 +345,7 @@ namespace Dynamitey.DynamicObjects
         /// </returns>
         public override string ToString()
         {
-            return _dictionary.ToString();
+            return this._dictionary.ToString();
         }
     }
 }

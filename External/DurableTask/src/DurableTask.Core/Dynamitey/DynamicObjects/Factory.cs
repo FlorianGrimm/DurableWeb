@@ -38,7 +38,7 @@ namespace Dynamitey.DynamicObjects
         /// </returns>
         public override bool TryGetMember(System.Dynamic.GetMemberBinder binder, out object result)
         {
-            result = GetInstanceForDynamicMember(binder.Name);
+            result = this.GetInstanceForDynamicMember(binder.Name);
             return result != null;
         }
 
@@ -53,7 +53,7 @@ namespace Dynamitey.DynamicObjects
         /// </returns>
         public override bool TryInvokeMember(System.Dynamic.InvokeMemberBinder binder, object[] args, out object result)
         {
-            result = GetInstanceForDynamicMember(binder.Name, args);
+            result = this.GetInstanceForDynamicMember(binder.Name, args);
             return result != null;
         }
 
@@ -77,7 +77,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         protected virtual object GetInstanceForDynamicMember(string memberName, params object[] args)
         {
-            return TryTypeForName(memberName, out var type) ? CreateType(type, args) : null;
+            return this.TryTypeForName(memberName, out var type) ? this.CreateType(type, args) : null;
         }
     }
 
@@ -111,13 +111,13 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         protected override object GetInstanceForDynamicMember(string memberName, params object[] args)
         {
-            lock (_lockTable)
+            lock (this._lockTable)
             {
-                if (!_hashFactoryTypes.ContainsKey(memberName))
+                if (!this._hashFactoryTypes.ContainsKey(memberName))
                 {
-                    if (TryTypeForName(memberName, out var type))
+                    if (this.TryTypeForName(memberName, out var type))
                     {
-                        _hashFactoryTypes.Add(memberName, CreateType(type, args));
+                        this._hashFactoryTypes.Add(memberName, this.CreateType(type, args));
                     }
                     else
                     {
@@ -126,7 +126,7 @@ namespace Dynamitey.DynamicObjects
 
                 }
 
-                return _hashFactoryTypes[memberName];
+                return this._hashFactoryTypes[memberName];
             }
         }
     }

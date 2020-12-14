@@ -48,7 +48,7 @@ namespace Dynamitey.DynamicObjects
         /// </returns>
         public virtual bool ContainsType(Type type)
         {
-            return GetContainedTypes().Contains(type);
+            return this.GetContainedTypes().Contains(type);
         }
 
     }
@@ -61,12 +61,12 @@ namespace Dynamitey.DynamicObjects
 
         public PropretySpecType(IDictionary<string, Type> propertySpec)
         {
-            PropertySpec = propertySpec;
+            this.PropertySpec = propertySpec;
         }
 
         public override IEnumerable<MemberInfo> GetMember(string binderName)
         {
-            if (PropertySpec.TryGetValue(binderName, out var val))
+            if (this.PropertySpec.TryGetValue(binderName, out var val))
             {
                 return new[] {val.GetTypeInfo()};
 
@@ -76,7 +76,7 @@ namespace Dynamitey.DynamicObjects
 
         public override IEnumerable<string> GetMemberNames()
         {
-            return PropertySpec.Keys;
+            return this.PropertySpec.Keys;
         }
 
         public override Type[] GetContainedTypes()
@@ -123,7 +123,7 @@ namespace Dynamitey.DynamicObjects
         /// <param name="type">The type.</param>
         public RealType(Type type)
         {
-            TargetType = type;
+            this.TargetType = type;
         }
 
         /// <summary>
@@ -133,13 +133,13 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public override IEnumerable<MemberInfo> GetMember(string binderName)
         {
-            return TargetType.GetTypeInfo().GetMember(binderName);
+            return this.TargetType.GetTypeInfo().GetMember(binderName);
         }
 
         public override IEnumerable<string> GetMemberNames()
         {
       
-            var members = TargetType.GetTypeInfo()
+            var members = this.TargetType.GetTypeInfo()
                 .GetMembers(BindingFlags.Public | BindingFlags.FlattenHierarchy | BindingFlags.Instance)
                 .Where(it=> !((it as MethodInfo)?.IsHideBySig ?? false))
                 .Select(it => it.Name)
@@ -153,7 +153,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public override Type[] GetContainedTypes()
         {
-            return new[] { TargetType };
+            return new[] { this.TargetType };
         }
 
    
@@ -194,7 +194,7 @@ namespace Dynamitey.DynamicObjects
         /// <param name="types">The types.</param>
         public AggreType(params FauxType[] types)
         {
-            Types.AddRange(types);
+            this.Types.AddRange(types);
         }
 
         /// <summary>
@@ -203,12 +203,12 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public Type[] GetInterfaceTypes()
         {
-            return Types.SelectMany(it => it.GetContainedTypes()).Where(it => it.GetTypeInfo().IsInterface).ToArray();
+            return this.Types.SelectMany(it => it.GetContainedTypes()).Where(it => it.GetTypeInfo().IsInterface).ToArray();
         }
 
         public override IEnumerable<string> GetMemberNames()
         {
-            return Types.SelectMany(it => it.GetMemberNames()).Distinct();
+            return this.Types.SelectMany(it => it.GetMemberNames()).Distinct();
         }
 
         /// <summary>
@@ -217,9 +217,9 @@ namespace Dynamitey.DynamicObjects
         /// <param name="type">The type.</param>
         public void AddType(Type type)
         {
-            if (!ContainsType(type))
+            if (!this.ContainsType(type))
             {
-                Types.Add(type);
+                this.Types.Add(type);
             }
         }
 
@@ -233,18 +233,18 @@ namespace Dynamitey.DynamicObjects
             {
                 foreach (var realType in type.GetContainedTypes())
                 {
-                    AddType(realType);
+                    this.AddType(realType);
                 }
             }else if (type is AggreType)
             {
                 foreach (var fauxType in ((AggreType)type).Types)
                 {
-                    AddType(fauxType);
+                    this.AddType(fauxType);
                 }
             }
             else
             {
-                Types.Add(type);
+                this.Types.Add(type);
             }
 
         }
@@ -257,7 +257,7 @@ namespace Dynamitey.DynamicObjects
         public override IEnumerable<MemberInfo> GetMember(string binderName)
         {
             var list = new List<MemberInfo>();
-            foreach (FauxType t in Types)
+            foreach (FauxType t in this.Types)
             {
                 list.AddRange(t.GetMember(binderName));
             }
@@ -270,7 +270,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public override Type[] GetContainedTypes()
         {
-            return Types.SelectMany(it => it.GetContainedTypes()).ToArray();
+            return this.Types.SelectMany(it => it.GetContainedTypes()).ToArray();
         }
     }
 }

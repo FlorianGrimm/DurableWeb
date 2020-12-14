@@ -43,8 +43,8 @@ namespace Dynamitey.DynamicObjects
         /// <param name="regex">The regex.</param>
         public RegexMatch(Match match, Regex regex = null)
         {
-            _match = match;
-            _regex = regex;
+            this._match = match;
+            this._regex = regex;
         }
 
 
@@ -54,9 +54,9 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public override IEnumerable<string> GetDynamicMemberNames()
         {
-            if (_regex == null)
+            if (this._regex == null)
                 return Enumerable.Empty<string>();
-            return _regex.GetGroupNames();
+            return this._regex.GetGroupNames();
         }
 
         /// <summary>
@@ -67,8 +67,8 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
        public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            var tGroup = _match.Groups[binder.Name];
-            if (!TryTypeForName(binder.Name, out var outType))
+            var tGroup = this._match.Groups[binder.Name];
+            if (!this.TryTypeForName(binder.Name, out var outType))
                 outType = typeof (string);
 
             if (!tGroup.Success)
@@ -95,7 +95,7 @@ namespace Dynamitey.DynamicObjects
         {
             get
             {
-                var tGroup = _match.Groups[value];
+                var tGroup = this._match.Groups[value];
 
                 if (!tGroup.Success)
                 {
@@ -117,7 +117,7 @@ namespace Dynamitey.DynamicObjects
         {
             get
             {
-                var tGroup = _match.Groups[value];
+                var tGroup = this._match.Groups[value];
 
                 if (!tGroup.Success)
                 {
@@ -127,7 +127,7 @@ namespace Dynamitey.DynamicObjects
             }
         }
 
-        string IRegexMatch.Value => _match.Value;
+        string IRegexMatch.Value => this._match.Value;
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
@@ -137,7 +137,7 @@ namespace Dynamitey.DynamicObjects
         /// </returns>
         public override string ToString()
         {
-            return _match.ToString();
+            return this._match.ToString();
         }
     }
 }

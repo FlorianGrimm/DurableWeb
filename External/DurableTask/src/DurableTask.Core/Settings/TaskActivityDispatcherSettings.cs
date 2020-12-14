@@ -23,10 +23,10 @@ namespace DurableTask.Core.Settings
         /// </summary>
         public TaskActivityDispatcherSettings()
         {
-            TransientErrorBackOffSecs = FrameworkConstants.ActivityTransientErrorBackOffSecs;
-            NonTransientErrorBackOffSecs = FrameworkConstants.ActivityNonTransientErrorBackOffSecs;
-            DispatcherCount = FrameworkConstants.ActivityDefaultDispatcherCount;
-            MaxConcurrentActivities = FrameworkConstants.ActivityDefaultMaxConcurrentItems;
+            this.TransientErrorBackOffSecs = FrameworkConstants.ActivityTransientErrorBackOffSecs;
+            this.NonTransientErrorBackOffSecs = FrameworkConstants.ActivityNonTransientErrorBackOffSecs;
+            this.DispatcherCount = FrameworkConstants.ActivityDefaultDispatcherCount;
+            this.MaxConcurrentActivities = FrameworkConstants.ActivityDefaultMaxConcurrentItems;
         }
 
         /// <summary>

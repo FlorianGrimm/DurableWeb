@@ -87,7 +87,7 @@ namespace Dynamitey.DynamicObjects
                 try
                 {
                     //Check if there is a get property because it might return a function
-                    result = Dynamic.InvokeGet(CallTarget, binder.Name);
+                    result = Dynamic.InvokeGet(this.CallTarget, binder.Name);
                 }
                 catch (RuntimeBinderException)
                 {

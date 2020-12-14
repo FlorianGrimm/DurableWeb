@@ -28,7 +28,7 @@ namespace DurableTask.Core.Settings
         /// </summary>
         public CorrelationSettings()
         {
-            Protocol = Protocol.W3CTraceContext;
+            this.Protocol = Protocol.W3CTraceContext;
         }
 
         /// <summary>

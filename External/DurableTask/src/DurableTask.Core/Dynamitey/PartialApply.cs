@@ -78,13 +78,13 @@ namespace Dynamitey
         /// <param name="invocationKind">Kind of the invocation.</param>
         public PartialApply(object target, object[] args, string memberName = null, int? totalCount = null, InvocationKind? invocationKind = null)
         {
-            _target = target;
-            _memberName = memberName;
-            _invocationKind = invocationKind ?? (String.IsNullOrWhiteSpace(_memberName)
+            this._target = target;
+            this._memberName = memberName;
+            this._invocationKind = invocationKind ?? (String.IsNullOrWhiteSpace(this._memberName)
                                      ? InvocationKind.InvokeUnknown
                                      : InvocationKind.InvokeMemberUnknown);
-            _totalArgCount = totalCount;
-            _args = args;
+            this._totalArgCount = totalCount;
+            this._args = args;
         }
 
        
@@ -102,31 +102,31 @@ namespace Dynamitey
         /// Gets the target.
         /// </summary>
         /// <value>The target.</value>
-        public object Target => _target;
+        public object Target => this._target;
 
         /// <summary>
         /// Gets the name of the member.
         /// </summary>
         /// <value>The name of the member.</value>
-        public string MemberName => _memberName;
+        public string MemberName => this._memberName;
 
         /// <summary>
         /// Gets the args.
         /// </summary>
         /// <value>The args.</value>
-        public object[] Args => _args;
+        public object[] Args => this._args;
 
         /// <summary>
         /// Gets the total arg count.
         /// </summary>
         /// <value>The total arg count.</value>
-        public int? TotalArgCount => _totalArgCount;
+        public int? TotalArgCount => this._totalArgCount;
 
         /// <summary>
         /// Gets the kind of the invocation.
         /// </summary>
         /// <value>The kind of the invocation.</value>
-        public InvocationKind InvocationKind => _invocationKind;
+        public InvocationKind InvocationKind => this._invocationKind;
 
         private IDictionary<int, CacheableInvocation> _cacheableInvocation = new Dictionary<int, CacheableInvocation>();
 #pragma warning disable 1734
@@ -143,19 +143,19 @@ namespace Dynamitey
         public override bool TryInvoke(InvokeBinder binder, object[] args, out object result)
         {
             var tNamedArgs = Util.NameArgsIfNecessary(binder.CallInfo, args);
-            var tNewArgs = _args.Concat(tNamedArgs).ToArray();
+            var tNewArgs = this._args.Concat(tNamedArgs).ToArray();
 
-            if (_totalArgCount.HasValue && (_totalArgCount - Args.Length - args.Length > 0))
+            if (this._totalArgCount.HasValue && (this._totalArgCount - this.Args.Length - args.Length > 0))
             //Not Done currying
             {
-                result = new PartialApply(Target, tNewArgs, MemberName,
-                                   TotalArgCount, InvocationKind);
+                result = new PartialApply(this.Target, tNewArgs, this.MemberName,
+                                   this.TotalArgCount, this.InvocationKind);
 
                 return true;
             }
-            var tInvokeDirect = String.IsNullOrWhiteSpace(_memberName);
+            var tInvokeDirect = String.IsNullOrWhiteSpace(this._memberName);
 
-            if (tInvokeDirect && binder.CallInfo.ArgumentNames.Count == 0 && _target is Delegate tDel)
+            if (tInvokeDirect && binder.CallInfo.ArgumentNames.Count == 0 && this._target is Delegate tDel)
             //Optimization for direct delegate calls
             {
                 result = tDel.FastDynamicInvoke(tNewArgs);
@@ -166,20 +166,20 @@ namespace Dynamitey
             Invocation tInvocation;
             if (binder.CallInfo.ArgumentNames.Count == 0) //If no argument names we can cache the callsite
             {
-                if (!_cacheableInvocation.TryGetValue(tNewArgs.Length, out var tCacheableInvocation))
+                if (!this._cacheableInvocation.TryGetValue(tNewArgs.Length, out var tCacheableInvocation))
                 {
-                    tCacheableInvocation = new CacheableInvocation(InvocationKind, _memberName, argCount: tNewArgs.Length, context: _target);
-                    _cacheableInvocation[tNewArgs.Length] = tCacheableInvocation;
+                    tCacheableInvocation = new CacheableInvocation(this.InvocationKind, this._memberName, argCount: tNewArgs.Length, context: this._target);
+                    this._cacheableInvocation[tNewArgs.Length] = tCacheableInvocation;
 
                 }
                 tInvocation = tCacheableInvocation;
             }
             else
             {
-                tInvocation = new Invocation(InvocationKind, _memberName);
+                tInvocation = new Invocation(this.InvocationKind, this._memberName);
             }
 
-            result = tInvocation.Invoke(_target, tNewArgs);
+            result = tInvocation.Invoke(this._target, tNewArgs);
 
 
             return true;

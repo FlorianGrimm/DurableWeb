@@ -24,10 +24,10 @@ namespace DurableTask.Core
             TaskOrchestrationExecutor executor,
             IEnumerable<OrchestratorAction> latestDecisions)
         {
-            RuntimeState = state;
-            TaskOrchestration = orchestration;
-            OrchestrationExecutor = executor;
-            LatestDecisions = latestDecisions;
+            this.RuntimeState = state;
+            this.TaskOrchestration = orchestration;
+            this.OrchestrationExecutor = executor;
+            this.LatestDecisions = latestDecisions;
         }
 
         public OrchestrationRuntimeState RuntimeState { get; }

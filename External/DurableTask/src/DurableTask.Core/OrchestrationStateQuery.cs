@@ -41,7 +41,7 @@ namespace DurableTask.Core
         /// </summary>
         public OrchestrationStateQuery()
         {
-            FilterMap = new Dictionary<Type, OrchestrationStateQueryFilter>();
+            this.FilterMap = new Dictionary<Type, OrchestrationStateQueryFilter>();
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace DurableTask.Core
         /// </summary>
         public Tuple<OrchestrationStateQueryFilter, IEnumerable<OrchestrationStateQueryFilter>> GetFilters()
         {
-            ICollection<OrchestrationStateQueryFilter> filters = FilterMap.Values;
+            ICollection<OrchestrationStateQueryFilter> filters = this.FilterMap.Values;
             if (filters.Count == 0)
             {
                 return null;
@@ -63,13 +63,13 @@ namespace DurableTask.Core
             var secondaryFilters = new List<OrchestrationStateQueryFilter>();
 
             OrchestrationStateQueryFilter primaryFilter = filters.First();
-            int primaryFilterPrecedence = SafeGetFilterPrecedence(primaryFilter);
+            int primaryFilterPrecedence = this.SafeGetFilterPrecedence(primaryFilter);
 
             if (filters.Count > 1)
             {
                 foreach (OrchestrationStateQueryFilter filter in filters)
                 {
-                    int newPrecedence = SafeGetFilterPrecedence(filter);
+                    int newPrecedence = this.SafeGetFilterPrecedence(filter);
                     if (newPrecedence > primaryFilterPrecedence)
                     {
                         secondaryFilters.Add(primaryFilter);
@@ -105,7 +105,7 @@ namespace DurableTask.Core
         /// <returns></returns>
         public OrchestrationStateQuery AddInstanceFilter(string instanceId)
         {
-            return AddInstanceFilter(instanceId, false);
+            return this.AddInstanceFilter(instanceId, false);
         }
 
         /// <summary>
@@ -116,12 +116,12 @@ namespace DurableTask.Core
         /// <returns></returns>
         public OrchestrationStateQuery AddInstanceFilter(string instanceId, string executionId)
         {
-            if (FilterMap.ContainsKey(typeof(OrchestrationStateInstanceFilter)))
+            if (this.FilterMap.ContainsKey(typeof(OrchestrationStateInstanceFilter)))
             {
                 throw new ArgumentException("Cannot add more than one instance filters");
             }
 
-            FilterMap.Add(typeof(OrchestrationStateInstanceFilter),
+            this.FilterMap.Add(typeof(OrchestrationStateInstanceFilter),
                 new OrchestrationStateInstanceFilter
                 {
                     InstanceId = instanceId,
@@ -140,12 +140,12 @@ namespace DurableTask.Core
         /// <returns></returns>
         public OrchestrationStateQuery AddInstanceFilter(string instanceId, bool startsWith)
         {
-            if (FilterMap.ContainsKey(typeof(OrchestrationStateInstanceFilter)))
+            if (this.FilterMap.ContainsKey(typeof(OrchestrationStateInstanceFilter)))
             {
                 throw new ArgumentException("Cannot add more than one instance filters");
             }
 
-            FilterMap.Add(typeof(OrchestrationStateInstanceFilter),
+            this.FilterMap.Add(typeof(OrchestrationStateInstanceFilter),
                 new OrchestrationStateInstanceFilter { InstanceId = instanceId, StartsWith = startsWith });
 
             return this;
@@ -158,7 +158,7 @@ namespace DurableTask.Core
         /// <returns></returns>
         public OrchestrationStateQuery AddNameVersionFilter(string name)
         {
-            return AddNameVersionFilter(name, null);
+            return this.AddNameVersionFilter(name, null);
         }
 
         /// <summary>
@@ -169,12 +169,12 @@ namespace DurableTask.Core
         /// <returns></returns>
         public OrchestrationStateQuery AddNameVersionFilter(string name, string version)
         {
-            if (FilterMap.ContainsKey(typeof(OrchestrationStateNameVersionFilter)))
+            if (this.FilterMap.ContainsKey(typeof(OrchestrationStateNameVersionFilter)))
             {
                 throw new ArgumentException("Cannot add more than one name/version filters");
             }
 
-            FilterMap.Add(typeof(OrchestrationStateNameVersionFilter),
+            this.FilterMap.Add(typeof(OrchestrationStateNameVersionFilter),
                 new OrchestrationStateNameVersionFilter { Name = name, Version = version });
 
             return this;
@@ -187,7 +187,7 @@ namespace DurableTask.Core
         /// <returns></returns>
         public OrchestrationStateQuery AddStatusFilter(OrchestrationStatus status)
         {
-            return AddStatusFilter(status, FilterComparisonType.Equals);
+            return this.AddStatusFilter(status, FilterComparisonType.Equals);
         }
 
         /// <summary>
@@ -198,12 +198,12 @@ namespace DurableTask.Core
         /// <returns></returns>
         public OrchestrationStateQuery AddStatusFilter(OrchestrationStatus status, FilterComparisonType comparisonType)
         {
-            if (FilterMap.ContainsKey(typeof(OrchestrationStateStatusFilter)))
+            if (this.FilterMap.ContainsKey(typeof(OrchestrationStateStatusFilter)))
             {
                 throw new ArgumentException("Cannot add more than one status filters");
             }
 
-            FilterMap.Add(typeof(OrchestrationStateStatusFilter),
+            this.FilterMap.Add(typeof(OrchestrationStateStatusFilter),
                 new OrchestrationStateStatusFilter { Status = status, ComparisonType = comparisonType });
 
             return this;
@@ -219,12 +219,12 @@ namespace DurableTask.Core
         public OrchestrationStateQuery AddTimeRangeFilter(DateTime startTime, DateTime endTime,
             OrchestrationStateTimeRangeFilterType filterType)
         {
-            if (FilterMap.ContainsKey(typeof(OrchestrationStateTimeRangeFilter)))
+            if (this.FilterMap.ContainsKey(typeof(OrchestrationStateTimeRangeFilter)))
             {
                 throw new ArgumentException("Cannot add more than one time range filters");
             }
 
-            FilterMap.Add(typeof(OrchestrationStateTimeRangeFilter),
+            this.FilterMap.Add(typeof(OrchestrationStateTimeRangeFilter),
                 new OrchestrationStateTimeRangeFilter
                 {
                     StartTime = startTime,

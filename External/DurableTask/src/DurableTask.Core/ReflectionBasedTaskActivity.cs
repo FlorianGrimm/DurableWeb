@@ -33,9 +33,9 @@ namespace DurableTask.Core
         /// <param name="methodInfo">The Reflection.methodInfo for invoking the method on the activity object</param>
         public ReflectionBasedTaskActivity(object activityObject, MethodInfo methodInfo)
         {
-            DataConverter = new JsonDataConverter();
-            ActivityObject = activityObject;
-            MethodInfo = methodInfo;
+            this.DataConverter = new JsonDataConverter();
+            this.ActivityObject = activityObject;
+            this.MethodInfo = methodInfo;
         }
 
         /// <summary>
@@ -74,12 +74,12 @@ namespace DurableTask.Core
             var jArray = Utils.ConvertToJArray(input);
 
             int parameterCount = jArray.Count;
-            ParameterInfo[] methodParameters = MethodInfo.GetParameters();
+            ParameterInfo[] methodParameters = this.MethodInfo.GetParameters();
             if (methodParameters.Length < parameterCount)
             {
                 throw new TaskFailureException(
                     "TaskActivity implementation cannot be invoked due to more than expected input parameters.  Signature mismatch.")
-                    .WithFailureSource(MethodInfoString());
+                    .WithFailureSource(this.MethodInfoString());
             }
 
             var inputParameters = new object[methodParameters.Length];
@@ -96,7 +96,7 @@ namespace DurableTask.Core
                     else
                     {
                         string serializedValue = jToken.ToString();
-                        inputParameters[i] = DataConverter.Deserialize(serializedValue, parameterType);
+                        inputParameters[i] = this.DataConverter.Deserialize(serializedValue, parameterType);
                     }
                 }
                 else
@@ -115,12 +115,12 @@ namespace DurableTask.Core
             string serializedReturn;
             try
             {
-                object invocationResult = InvokeActivity(inputParameters);
+                object invocationResult = this.InvokeActivity(inputParameters);
                 if (invocationResult is Task invocationTask)
                 {
-                    if (MethodInfo.ReturnType.IsGenericType)
+                    if (this.MethodInfo.ReturnType.IsGenericType)
                     {
-                        serializedReturn = DataConverter.Serialize(await ((dynamic)invocationTask));
+                        serializedReturn = this.DataConverter.Serialize(await ((dynamic)invocationTask));
                     }
                     else
                     {
@@ -130,21 +130,21 @@ namespace DurableTask.Core
                 }
                 else
                 {
-                    serializedReturn = DataConverter.Serialize(invocationResult);
+                    serializedReturn = this.DataConverter.Serialize(invocationResult);
                 }
             }
             catch (TargetInvocationException e)
             {
                 Exception realException = e.InnerException ?? e;
-                string details = Utils.SerializeCause(realException, DataConverter);
+                string details = Utils.SerializeCause(realException, this.DataConverter);
                 throw new TaskFailureException(realException.Message, details)
-                    .WithFailureSource(MethodInfoString());
+                    .WithFailureSource(this.MethodInfoString());
             }
             catch (Exception e) when (!Utils.IsFatal(e))
             {
-                string details = Utils.SerializeCause(e, DataConverter);
+                string details = Utils.SerializeCause(e, this.DataConverter);
                 throw new TaskFailureException(e.Message, e, details)
-                    .WithFailureSource(MethodInfoString());
+                    .WithFailureSource(this.MethodInfoString());
             }
 
             return serializedReturn;
@@ -157,12 +157,12 @@ namespace DurableTask.Core
         /// <returns></returns>
         public virtual object InvokeActivity(object[] inputParameters)
         {
-            return MethodInfo.Invoke(ActivityObject, inputParameters);
+            return this.MethodInfo.Invoke(this.ActivityObject, inputParameters);
         }
 
         string MethodInfoString()
         {
-            return $"{MethodInfo.ReflectedType?.FullName}.{MethodInfo.Name}";
+            return $"{this.MethodInfo.ReflectedType?.FullName}.{this.MethodInfo.Name}";
         }
     }
 }

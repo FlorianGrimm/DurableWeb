@@ -103,7 +103,7 @@ namespace Dynamitey.DynamicObjects
         /// <param name="target">The target.</param>
         protected BaseForwarder(object target)
         {
-            Target = target;
+            this.Target = target;
         }
 
         /// <summary>
@@ -115,10 +115,10 @@ namespace Dynamitey.DynamicObjects
         public override IEnumerable<string> GetDynamicMemberNames()
         {
            
-                var tDyanmic = Dynamic.GetMemberNames(CallTarget, dynamicOnly: true);
+                var tDyanmic = Dynamic.GetMemberNames(this.CallTarget, dynamicOnly: true);
                 if (!tDyanmic.Any())
                 {
-                    return Dynamic.GetMemberNames(CallTarget);
+                    return Dynamic.GetMemberNames(this.CallTarget);
                 }
             
             return base.GetDynamicMemberNames();
@@ -133,13 +133,13 @@ namespace Dynamitey.DynamicObjects
        
         protected object Target {  get;  set; }
 
-        object IForwarder.Target => Target;
+        object IForwarder.Target => this.Target;
 
         /// <summary>
         /// Gets the call target.
         /// </summary>
         /// <value>The call target.</value>
-        protected virtual object CallTarget => Target;
+        protected virtual object CallTarget => this.Target;
 
         /// <summary>
         /// Provides the implementation for operations that get member values. Classes derived from the <see cref="T:System.Dynamic.DynamicObject"/> class can override this method to specify dynamic behavior for operations such as getting a value for a property.
@@ -151,13 +151,13 @@ namespace Dynamitey.DynamicObjects
         /// </returns>
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            if (CallTarget == null)
+            if (this.CallTarget == null)
             {
                 result = null;
                 return false;
             }
 
-            if (Dynamic.InvokeIsEvent(CallTarget, binder.Name))
+            if (Dynamic.InvokeIsEvent(this.CallTarget, binder.Name))
             {
                 result = new AddRemoveMarker();
                 return true;
@@ -165,7 +165,7 @@ namespace Dynamitey.DynamicObjects
 
             try
             {
-                result = Dynamic.InvokeGet(CallTarget, binder.Name);
+                result = Dynamic.InvokeGet(this.CallTarget, binder.Name);
             }
             catch (RuntimeBinderException)
             {
@@ -189,7 +189,7 @@ namespace Dynamitey.DynamicObjects
 #pragma warning restore 1734
         public override bool TryInvoke(InvokeBinder binder, object[] args, out object result)
         {
-            if (CallTarget == null)
+            if (this.CallTarget == null)
             {
                 result = null;
                 return false;
@@ -199,7 +199,7 @@ namespace Dynamitey.DynamicObjects
 
             try
             {
-                result = Dynamic.Invoke(CallTarget, tArgs);
+                result = Dynamic.Invoke(this.CallTarget, tArgs);
 
             }
             catch (RuntimeBinderException)
@@ -207,7 +207,7 @@ namespace Dynamitey.DynamicObjects
                 result = null;
                 try
                 {
-                    Dynamic.InvokeAction(CallTarget, tArgs);
+                    Dynamic.InvokeAction(this.CallTarget, tArgs);
                 }
                 catch (RuntimeBinderException)
                 {
@@ -227,7 +227,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
-            if (CallTarget == null)
+            if (this.CallTarget == null)
             {
                 result = null;
                 return false;
@@ -281,7 +281,7 @@ namespace Dynamitey.DynamicObjects
             var fullName = name(binder.Name, types);
             try
             {
-                result = Dynamic.InvokeMember(CallTarget, fullName, tArgs);
+                result = Dynamic.InvokeMember(this.CallTarget, fullName, tArgs);
                
             }
             catch (RuntimeBinderException)
@@ -289,7 +289,7 @@ namespace Dynamitey.DynamicObjects
                 result = null;
                 try
                 {
-                    Dynamic.InvokeMemberAction(CallTarget, fullName, tArgs);
+                    Dynamic.InvokeMemberAction(this.CallTarget, fullName, tArgs);
                 }
                 catch (RuntimeBinderException)
                 {
@@ -310,22 +310,22 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            if (CallTarget == null)
+            if (this.CallTarget == null)
             {
                 return false;
             }
 
-            if (Dynamic.InvokeIsEvent(CallTarget, binder.Name) && value is AddRemoveMarker arm)
+            if (Dynamic.InvokeIsEvent(this.CallTarget, binder.Name) && value is AddRemoveMarker arm)
             {
       
 
                 if (arm.IsAdding)
                 {
-                    Dynamic.InvokeAddAssignMember(CallTarget, binder.Name, arm.Delegate);
+                    Dynamic.InvokeAddAssignMember(this.CallTarget, binder.Name, arm.Delegate);
                 }
                 else
                 {
-                    Dynamic.InvokeSubtractAssignMember(CallTarget, binder.Name, arm.Delegate);
+                    Dynamic.InvokeSubtractAssignMember(this.CallTarget, binder.Name, arm.Delegate);
                 }
 
                 return true;
@@ -333,7 +333,7 @@ namespace Dynamitey.DynamicObjects
 
             try
             {
-                Dynamic.InvokeSet(CallTarget, binder.Name, value);
+                Dynamic.InvokeSet(this.CallTarget, binder.Name, value);
 
                 return true;
             }
@@ -352,7 +352,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result)
         {
-            if (CallTarget == null)
+            if (this.CallTarget == null)
             {
                 result = null;
                 return false;
@@ -362,7 +362,7 @@ namespace Dynamitey.DynamicObjects
 
             try
             {
-                result = Dynamic.InvokeGetIndex(CallTarget, tArgs);
+                result = Dynamic.InvokeGetIndex(this.CallTarget, tArgs);
                 return true;
             }
             catch (RuntimeBinderException)
@@ -381,7 +381,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public override bool TrySetIndex(SetIndexBinder binder, object[] indexes, object value)
         {
-            if (CallTarget == null)
+            if (this.CallTarget == null)
             {
                 return false;
             }
@@ -392,7 +392,7 @@ namespace Dynamitey.DynamicObjects
             {
 
 
-                Dynamic.InvokeSetIndex(CallTarget, tArgs);
+                Dynamic.InvokeSetIndex(this.CallTarget, tArgs);
                 return true;
             }
             catch (RuntimeBinderException)
@@ -409,9 +409,9 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public bool Equals(BaseForwarder other)
         {
-            if (ReferenceEquals(null, other)) return ReferenceEquals(null, CallTarget);
+            if (ReferenceEquals(null, other)) return ReferenceEquals(null, this.CallTarget);
             if (ReferenceEquals(this, other)) return true;
-            return Equals(other.CallTarget, CallTarget);
+            return Equals(other.CallTarget, this.CallTarget);
         }
 
         /// <summary>
@@ -423,10 +423,10 @@ namespace Dynamitey.DynamicObjects
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return ReferenceEquals(null, CallTarget); 
+            if (ReferenceEquals(null, obj)) return ReferenceEquals(null, this.CallTarget); 
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != typeof (BaseForwarder)) return false;
-            return Equals((BaseForwarder) obj);
+            return this.Equals((BaseForwarder) obj);
         }
 
         /// <summary>
@@ -437,7 +437,7 @@ namespace Dynamitey.DynamicObjects
         /// </returns>
         public override int GetHashCode()
         {
-            return (CallTarget != null ? CallTarget.GetHashCode() : 0);
+            return (this.CallTarget != null ? this.CallTarget.GetHashCode() : 0);
         }
 
     

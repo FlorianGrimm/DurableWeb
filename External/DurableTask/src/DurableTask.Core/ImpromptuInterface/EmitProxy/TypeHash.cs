@@ -36,24 +36,24 @@ namespace ImpromptuInterface.Build
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            if (InformalInterface != null || other.InformalInterface !=null)
+            if (this.InformalInterface != null || other.InformalInterface !=null)
             {
-                if (InformalInterface == null || other.InformalInterface == null)
+                if (this.InformalInterface == null || other.InformalInterface == null)
                     return false;
 
-                if (Types.Length != other.Types.Length)
+                if (this.Types.Length != other.Types.Length)
                     return false;
 
-                var tTypes = Types.SequenceEqual(other.Types);
+                var tTypes = this.Types.SequenceEqual(other.Types);
 
                 if (!tTypes )
                     return false;
                 
-                return InformalInterface.SequenceEqual(other.InformalInterface);
+                return this.InformalInterface.SequenceEqual(other.InformalInterface);
             }
 
 
-            return Types.SequenceEqual(other.Types);
+            return this.Types.SequenceEqual(other.Types);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace ImpromptuInterface.Build
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != typeof(TypeHash)) return false;
-            return Equals((TypeHash)obj);
+            return this.Equals((TypeHash)obj);
         }
 
         /// <summary>
@@ -82,17 +82,17 @@ namespace ImpromptuInterface.Build
             unchecked
             {
 
-                if (Types.Length > 16)
+                if (this.Types.Length > 16)
                 {
-                    return Types.Length.GetHashCode();
+                    return this.Types.Length.GetHashCode();
                 }
 
 
-                var tReturn = Types.Aggregate(1, (current, type) => (current * 397) ^ type.GetHashCode());
+                var tReturn = this.Types.Aggregate(1, (current, type) => (current * 397) ^ type.GetHashCode());
 
-                if (InformalInterface != null)
+                if (this.InformalInterface != null)
                 {
-                    tReturn = InformalInterface.Aggregate(tReturn, (current, type) => (current * 397) ^ type.GetHashCode());
+                    tReturn = this.InformalInterface.Aggregate(tReturn, (current, type) => (current * 397) ^ type.GetHashCode());
                 }
                 return tReturn;
             }
@@ -156,8 +156,8 @@ namespace ImpromptuInterface.Build
         public TypeHash(Type type1, params Type[] moreTypes)
             :this()
         {
-            Types = new[] { type1 }.Concat(moreTypes.OrderBy(it => it.Name)).ToArray();
-            InformalInterface = null;
+            this.Types = new[] { type1 }.Concat(moreTypes.OrderBy(it => it.Name)).ToArray();
+            this.InformalInterface = null;
         }
 
        
@@ -171,8 +171,8 @@ namespace ImpromptuInterface.Build
         public TypeHash(Type type1, IDictionary<string, Type> informalInterface)
             : this()
         {
-            Types = new[] {type1};
-            InformalInterface = informalInterface;
+            this.Types = new[] {type1};
+            this.InformalInterface = informalInterface;
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace ImpromptuInterface.Build
         [Obsolete("Use TypeHash.Create instead.")]
         public TypeHash(bool strictOrder, params MemberInfo[] moreTypes):this()
         {
-            Types = strictOrder 
+            this.Types = strictOrder 
                 ? moreTypes 
                 : moreTypes.OrderBy(it => it.Name).ToArray();
         }

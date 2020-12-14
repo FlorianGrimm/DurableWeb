@@ -36,7 +36,7 @@ namespace DurableTask.Core.History
         public ExecutionStartedEvent(int eventId, string input)
             : base(eventId)
         {
-            Input = input;
+            this.Input = input;
         }
 
         /// <summary>

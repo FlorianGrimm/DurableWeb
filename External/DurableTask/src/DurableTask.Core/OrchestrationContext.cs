@@ -64,7 +64,7 @@ namespace DurableTask.Core
         /// <returns></returns>
         public virtual T CreateClient<T>() where T : class
         {
-            return CreateClient<T>(false);
+            return this.CreateClient<T>(false);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace DurableTask.Core
         /// <returns>Dynamic proxy that can be used to schedule the remote tasks</returns>
         public virtual T CreateRetryableClient<T>(RetryOptions retryOptions) where T : class
         {
-            return CreateRetryableClient<T>(retryOptions, false);
+            return this.CreateRetryableClient<T>(retryOptions, false);
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace DurableTask.Core
         public virtual Task<T> ScheduleWithRetry<T>(Type taskActivityType, RetryOptions retryOptions,
             params object[] parameters)
         {
-            return ScheduleWithRetry<T>(NameVersionHelper.GetDefaultName(taskActivityType),
+            return this.ScheduleWithRetry<T>(NameVersionHelper.GetDefaultName(taskActivityType),
                 NameVersionHelper.GetDefaultVersion(taskActivityType),
                 retryOptions, parameters);
         }
@@ -160,7 +160,7 @@ namespace DurableTask.Core
         public virtual Task<T> ScheduleWithRetry<T>(string name, string version, RetryOptions retryOptions,
             params object[] parameters)
         {
-            Task<T> RetryCall() => ScheduleTask<T>(name, version, parameters);
+            Task<T> RetryCall() => this.ScheduleTask<T>(name, version, parameters);
             var retryInterceptor = new RetryInterceptor<T>(this, retryOptions, RetryCall);
             return retryInterceptor.Invoke();
         }
@@ -176,7 +176,7 @@ namespace DurableTask.Core
         public virtual Task<T> CreateSubOrchestrationInstanceWithRetry<T>(Type orchestrationType,
             RetryOptions retryOptions, object input)
         {
-            return CreateSubOrchestrationInstanceWithRetry<T>(NameVersionHelper.GetDefaultName(orchestrationType),
+            return this.CreateSubOrchestrationInstanceWithRetry<T>(NameVersionHelper.GetDefaultName(orchestrationType),
                 NameVersionHelper.GetDefaultVersion(orchestrationType), retryOptions, input);
         }
 
@@ -192,7 +192,7 @@ namespace DurableTask.Core
         public virtual Task<T> CreateSubOrchestrationInstanceWithRetry<T>(Type orchestrationType, string instanceId,
             RetryOptions retryOptions, object input)
         {
-            return CreateSubOrchestrationInstanceWithRetry<T>(NameVersionHelper.GetDefaultName(orchestrationType),
+            return this.CreateSubOrchestrationInstanceWithRetry<T>(NameVersionHelper.GetDefaultName(orchestrationType),
                 NameVersionHelper.GetDefaultVersion(orchestrationType), instanceId, retryOptions, input);
         }
 
@@ -208,7 +208,7 @@ namespace DurableTask.Core
         public virtual Task<T> CreateSubOrchestrationInstanceWithRetry<T>(string name, string version,
             RetryOptions retryOptions, object input)
         {
-            Task<T> RetryCall() => CreateSubOrchestrationInstance<T>(name, version, input);
+            Task<T> RetryCall() => this.CreateSubOrchestrationInstance<T>(name, version, input);
             var retryInterceptor = new RetryInterceptor<T>(this, retryOptions, RetryCall);
             return retryInterceptor.Invoke();
         }
@@ -226,7 +226,7 @@ namespace DurableTask.Core
         public virtual Task<T> CreateSubOrchestrationInstanceWithRetry<T>(string name, string version, string instanceId,
             RetryOptions retryOptions, object input)
         {
-            Task<T> RetryCall() => CreateSubOrchestrationInstance<T>(name, version, instanceId, input);
+            Task<T> RetryCall() => this.CreateSubOrchestrationInstance<T>(name, version, instanceId, input);
             var retryInterceptor = new RetryInterceptor<T>(this, retryOptions, RetryCall);
             return retryInterceptor.Invoke();
         }
@@ -240,7 +240,7 @@ namespace DurableTask.Core
         /// <returns>Task that represents the execution of the specified TaskActivity</returns>
         public virtual Task<TResult> ScheduleTask<TResult>(Type activityType, params object[] parameters)
         {
-            return ScheduleTask<TResult>(NameVersionHelper.GetDefaultName(activityType),
+            return this.ScheduleTask<TResult>(NameVersionHelper.GetDefaultName(activityType),
                 NameVersionHelper.GetDefaultVersion(activityType), parameters);
         }
 
@@ -282,7 +282,7 @@ namespace DurableTask.Core
         /// <returns>Task that represents the execution of the specified sub-orchestration</returns>
         public virtual Task<T> CreateSubOrchestrationInstance<T>(Type orchestrationType, object input)
         {
-            return CreateSubOrchestrationInstance<T>(NameVersionHelper.GetDefaultName(orchestrationType),
+            return this.CreateSubOrchestrationInstance<T>(NameVersionHelper.GetDefaultName(orchestrationType),
                 NameVersionHelper.GetDefaultVersion(orchestrationType), input);
         }
 
@@ -296,7 +296,7 @@ namespace DurableTask.Core
         /// <returns>Task that represents the execution of the specified sub-orchestration</returns>
         public virtual Task<T> CreateSubOrchestrationInstance<T>(Type orchestrationType, string instanceId, object input)
         {
-            return CreateSubOrchestrationInstance<T>(NameVersionHelper.GetDefaultName(orchestrationType),
+            return this.CreateSubOrchestrationInstance<T>(NameVersionHelper.GetDefaultName(orchestrationType),
                 NameVersionHelper.GetDefaultVersion(orchestrationType), instanceId, input);
         }
 

@@ -24,7 +24,7 @@ namespace DurableTask.Core
         /// <param name="orchestrationInstance"></param>
         public TaskContext(OrchestrationInstance orchestrationInstance)
         {
-            OrchestrationInstance = orchestrationInstance;
+            this.OrchestrationInstance = orchestrationInstance;
         }
 
         /// <summary>

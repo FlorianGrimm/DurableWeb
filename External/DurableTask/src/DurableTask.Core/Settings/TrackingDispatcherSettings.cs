@@ -23,11 +23,11 @@ namespace DurableTask.Core.Settings
         /// </summary>
         public TrackingDispatcherSettings()
         {
-            TransientErrorBackOffSecs = FrameworkConstants.TrackingTransientErrorBackOffSecs;
-            NonTransientErrorBackOffSecs = FrameworkConstants.TrackingNonTransientErrorBackOffSecs;
-            DispatcherCount = FrameworkConstants.TrackingDefaultDispatcherCount;
-            MaxConcurrentTrackingSessions = FrameworkConstants.TrackingDefaultMaxConcurrentItems;
-            TrackHistoryEvents = FrameworkConstants.TrackingTrackHistoryEvents;
+            this.TransientErrorBackOffSecs = FrameworkConstants.TrackingTransientErrorBackOffSecs;
+            this.NonTransientErrorBackOffSecs = FrameworkConstants.TrackingNonTransientErrorBackOffSecs;
+            this.DispatcherCount = FrameworkConstants.TrackingDefaultDispatcherCount;
+            this.MaxConcurrentTrackingSessions = FrameworkConstants.TrackingDefaultMaxConcurrentItems;
+            this.TrackHistoryEvents = FrameworkConstants.TrackingTrackHistoryEvents;
         }
 
         /// <summary>

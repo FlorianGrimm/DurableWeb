@@ -157,9 +157,9 @@ namespace Dynamitey
         /// <param name="storedArgs">The args.</param>
         public Invocation(InvocationKind kind, String_OR_InvokeMemberName name, params object[] storedArgs)
         {
-            Kind = kind;
-            Name = name;
-            Args = storedArgs;
+            this.Kind = kind;
+            this.Name = name;
+            this.Args = storedArgs;
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace Dynamitey
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(other.Kind, Kind) && Equals(other.Name, Name) && (Equals(other.Args, Args) || Enumerable.SequenceEqual(other.Args, Args));
+            return Equals(other.Kind, this.Kind) && Equals(other.Name, this.Name) && (Equals(other.Args, this.Args) || Enumerable.SequenceEqual(other.Args, this.Args));
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace Dynamitey
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != typeof (Invocation)) return false;
-            return Equals((Invocation) obj);
+            return this.Equals((Invocation) obj);
         }
 
         /// <summary>
@@ -199,9 +199,9 @@ namespace Dynamitey
         {
             unchecked
             {
-                int result = Kind.GetHashCode();
-                result = (result*397) ^ (Name != null ? Name.GetHashCode() : 0);
-                result = (result*397) ^ (Args != null ? Args.GetHashCode() : 0);
+                int result = this.Kind.GetHashCode();
+                result = (result*397) ^ (this.Name != null ? this.Name.GetHashCode() : 0);
+                result = (result*397) ^ (this.Args != null ? this.Args.GetHashCode() : 0);
                 return result;
             }
         }
@@ -214,19 +214,19 @@ namespace Dynamitey
         /// <returns></returns>
         public virtual object Invoke(object target, params object[] args)
         {
-            switch (Kind)
+            switch (this.Kind)
             {
                 case InvocationKind.Constructor:
                     return Dynamic.InvokeConstructor((Type)target, args);
                 case InvocationKind.Convert:
                     bool tExplicit = false;
-                    if (Args.Length == 2)
+                    if (this.Args.Length == 2)
                         tExplicit = (bool)args[1];
                     return Dynamic.InvokeConvert(target, (Type)args[0], tExplicit);
                 case InvocationKind.Get:
-                    return Dynamic.InvokeGet(target, Name.Name);
+                    return Dynamic.InvokeGet(target, this.Name.Name);
                 case InvocationKind.Set:
-                    Dynamic.InvokeSet(target, Name.Name, args.FirstOrDefault());
+                    Dynamic.InvokeSet(target, this.Name.Name, args.FirstOrDefault());
                     return null;
                 case InvocationKind.GetIndex:
                     return Dynamic.InvokeGetIndex(target, args);
@@ -234,20 +234,20 @@ namespace Dynamitey
                     Dynamic.InvokeSetIndex(target, args);
                     return null;
                 case InvocationKind.InvokeMember:
-                    return Dynamic.InvokeMember(target, Name, args);
+                    return Dynamic.InvokeMember(target, this.Name, args);
                 case InvocationKind.InvokeMemberAction:
-                    Dynamic.InvokeMemberAction(target, Name, args);
+                    Dynamic.InvokeMemberAction(target, this.Name, args);
                     return null;
                 case InvocationKind.InvokeMemberUnknown:
                     {
                         try
                         {
-                            return Dynamic.InvokeMember(target, Name, args);
+                            return Dynamic.InvokeMember(target, this.Name, args);
                         }
                         catch (RuntimeBinderException)
                         {
 
-                            Dynamic.InvokeMemberAction(target, Name, args);
+                            Dynamic.InvokeMemberAction(target, this.Name, args);
                             return null;
                         }
                     }
@@ -270,15 +270,15 @@ namespace Dynamitey
                         }
                     }
                 case InvocationKind.AddAssign:
-                    Dynamic.InvokeAddAssignMember(target, Name.Name, args.FirstOrDefault());
+                    Dynamic.InvokeAddAssignMember(target, this.Name.Name, args.FirstOrDefault());
                     return null;
                 case InvocationKind.SubtractAssign:
-                    Dynamic.InvokeSubtractAssignMember(target, Name.Name, args.FirstOrDefault());
+                    Dynamic.InvokeSubtractAssignMember(target, this.Name.Name, args.FirstOrDefault());
                     return null;
                 case InvocationKind.IsEvent:
-                    return Dynamic.InvokeIsEvent(target, Name.Name);
+                    return Dynamic.InvokeIsEvent(target, this.Name.Name);
                 default:
-                    throw new InvalidOperationException("Unknown Invocation Kind: " + Kind);
+                    throw new InvalidOperationException("Unknown Invocation Kind: " + this.Kind);
             }
 
         }
@@ -290,7 +290,7 @@ namespace Dynamitey
         /// <returns></returns>
         public virtual object InvokeWithStoredArgs(object target)
         {
-            return Invoke(target, Args);
+            return this.Invoke(target, this.Args);
         }
     }
 }

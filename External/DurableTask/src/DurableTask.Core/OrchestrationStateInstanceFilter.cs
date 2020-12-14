@@ -24,7 +24,7 @@ namespace DurableTask.Core
         public OrchestrationStateInstanceFilter()
         {
             // default is exact match
-            StartsWith = false;
+            this.StartsWith = false;
         }
 
         /// <summary>

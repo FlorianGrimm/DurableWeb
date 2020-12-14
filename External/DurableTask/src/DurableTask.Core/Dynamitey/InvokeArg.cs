@@ -52,8 +52,8 @@ namespace Dynamitey
         /// <param name="value">The value.</param>
         public InvokeArg(string name, object value)
         {
-            Name = name;
-            Value = value;
+            this.Name = name;
+            this.Value = value;
         }
 
         /// <summary>

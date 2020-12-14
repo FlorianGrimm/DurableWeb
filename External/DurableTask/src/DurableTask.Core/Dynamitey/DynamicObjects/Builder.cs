@@ -134,9 +134,9 @@ namespace Dynamitey.DynamicObjects
         /// Initializes a new instance of the <see cref="Builder{TObjectProtoType}"/> class.
         /// </summary>
 		public Builder(){
-            _buildType = new Dictionary<string, Activate>();
-			Setup = new SetupTrampoline<TObjectProtoType>(this);
-			Object = new BuilderTrampoline<TObjectProtoType>(this);
+            this._buildType = new Dictionary<string, Activate>();
+            this.Setup = new SetupTrampoline<TObjectProtoType>(this);
+            this.Object = new BuilderTrampoline<TObjectProtoType>(this);
 		}
 		
         /// <summary>
@@ -146,7 +146,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public dynamic List(params dynamic[] contents)
         {
-            if (!_buildType.TryGetValue("List", out var tBuildType))
+            if (!this._buildType.TryGetValue("List", out var tBuildType))
                 tBuildType = null;
 
             if (tBuildType != null)
@@ -181,7 +181,7 @@ namespace Dynamitey.DynamicObjects
             if (tActivate == null)
             {
 
-                if (!_buildType.TryGetValue("Object", out tActivate))
+                if (!this._buildType.TryGetValue("Object", out tActivate))
                     tActivate = null;
                 if (tActivate != null)
                 {
@@ -191,8 +191,8 @@ namespace Dynamitey.DynamicObjects
                     tActivate = new Activate<List>(constructorArgs);
             }
 
-            _buildType["List"] = tActivate;
-            _buildType["Array"] = tActivate;
+            this._buildType["List"] = tActivate;
+            this._buildType["Array"] = tActivate;
             return this;
         }
 
@@ -203,7 +203,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public dynamic ListSetup<TList>()
         {
-            return ListSetup(new Activate<TList>());
+            return this.ListSetup(new Activate<TList>());
         }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public dynamic ListSetup(Func<object[]> constructorArgsFactory)
         {
-            return ListSetup((object)constructorArgsFactory);
+            return this.ListSetup((object)constructorArgsFactory);
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public dynamic ArraySetup<TList>()
         {
-            return ListSetup(new Activate<TList>());
+            return this.ListSetup(new Activate<TList>());
         }
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public dynamic ArraySetup(params dynamic[] constructorArgs)
         {
-            return ListSetup(constructorArgs);
+            return this.ListSetup(constructorArgs);
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public dynamic ArraySetup(Func<object[]> constructorArgsFactory)
         {
-            return ListSetup((object)constructorArgsFactory);
+            return this.ListSetup((object)constructorArgsFactory);
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public dynamic Array(params dynamic[] contents)
         {
-            return List(contents);
+            return this.List(contents);
         }
 
         /// <summary>
@@ -269,7 +269,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public dynamic ObjectSetup(params dynamic[] constructorArgs)
         {
-            _buildType["Object"] = new Activate<TObjectProtoType>(constructorArgs);
+            this._buildType["Object"] = new Activate<TObjectProtoType>(constructorArgs);
             return this;
         }
 
@@ -280,7 +280,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public dynamic ObjectSetup(Func<object[]> constructorArgsFactory)
         {
-            return ObjectSetup((object) constructorArgsFactory);
+            return this.ObjectSetup((object) constructorArgsFactory);
         }
 
         /// <summary>
@@ -302,7 +302,7 @@ namespace Dynamitey.DynamicObjects
             /// <param name="builder">The builder.</param>
             public BuilderTrampoline(Builder<TObjectProtoType> builder)
             {
-				_buider = builder;
+                this._buider = builder;
 			}
 
             /// <summary>
@@ -314,7 +314,7 @@ namespace Dynamitey.DynamicObjects
             /// <returns></returns>
             public override bool TryInvoke(InvokeBinder binder, object[] args, out object result)
             {
-                if (!_buider._buildType.TryGetValue("Object", out var tBuildType))
+                if (!this._buider._buildType.TryGetValue("Object", out var tBuildType))
                     tBuildType = null;
 
                 result = InvokeHelper(binder.CallInfo, args, tBuildType);
@@ -334,7 +334,7 @@ namespace Dynamitey.DynamicObjects
             /// </summary>
             /// <param name="builder">The builder.</param>
 			public SetupTrampoline(Builder<TObjectProtoType> builder){
-				_buider = builder;
+                this._buider = builder;
 			}
 
             /// <summary>
@@ -352,9 +352,9 @@ namespace Dynamitey.DynamicObjects
                 var tArgs = args.Select(it => it is Type ? new Activate(it) : (Activate) it);
                 foreach (var tKeyPair in binder.CallInfo.ArgumentNames.Zip(tArgs, (n, a) => new KeyValuePair<string, Activate>(n, a)))
                 {
-					_buider._buildType[tKeyPair.Key]=tKeyPair.Value;
+                    this._buider._buildType[tKeyPair.Key]=tKeyPair.Value;
 				}
-				result = _buider;
+				result = this._buider;
 				return true;
             }
 
@@ -371,19 +371,19 @@ namespace Dynamitey.DynamicObjects
             {
                 if (value is Type)
                 {
-                    _buildType[binder.Name] = new Activate(value);
+                    this._buildType[binder.Name] = new Activate(value);
                     return true;
                 }
 
                 if (value is Activate)
                 {
-                    _buildType[binder.Name] = value;
+                    this._buildType[binder.Name] = value;
                     return true;
                 }
             }
             else
             {
-                _buildType[binder.Name] = null;
+                this._buildType[binder.Name] = null;
                 return true;
             }
 			return false;
@@ -398,14 +398,14 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
-            if(!_buildType.TryGetValue(binder.Name, out var tBuildType))
+            if(!this._buildType.TryGetValue(binder.Name, out var tBuildType))
                 tBuildType = null;
 
-            if (tBuildType == null && !_buildType.TryGetValue("Object", out tBuildType))
+            if (tBuildType == null && !this._buildType.TryGetValue("Object", out tBuildType))
                 tBuildType = null;
 
             result = InvokeHelper(binder.CallInfo, args,tBuildType);
-            if (TryTypeForName(binder.Name, out var tType))
+            if (this.TryTypeForName(binder.Name, out var tType))
             {
                 var typeInfo = tType.GetTypeInfo();
                 if (Dynamic.Impromptu.IsAvailable && typeInfo.IsInterface && result != null && !typeInfo.IsAssignableFrom(result.GetType()))

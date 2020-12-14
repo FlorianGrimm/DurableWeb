@@ -63,9 +63,9 @@ namespace DurableTask.Core.Exceptions
             Exception cause)
             : base(eventId, reason, cause)
         {
-            ScheduleId = scheduleId;
-            Name = name;
-            Version = version;
+            this.ScheduleId = scheduleId;
+            this.Name = name;
+            this.Version = version;
         }
 
         /// <summary>
@@ -76,18 +76,18 @@ namespace DurableTask.Core.Exceptions
         protected TaskFailedException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            ScheduleId = info.GetInt32(nameof(ScheduleId));
-            Name = info.GetString(nameof(Name));
-            Version = info.GetString(nameof(Version));
+            this.ScheduleId = info.GetInt32(nameof(this.ScheduleId));
+            this.Name = info.GetString(nameof(this.Name));
+            this.Version = info.GetString(nameof(this.Version));
         }
 
         /// <inheritdoc />
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
-            info.AddValue(nameof(ScheduleId), ScheduleId);
-            info.AddValue(nameof(Name), Name);
-            info.AddValue(nameof(Version), Version);
+            info.AddValue(nameof(this.ScheduleId), this.ScheduleId);
+            info.AddValue(nameof(this.Name), this.Name);
+            info.AddValue(nameof(this.Version), this.Version);
         }
 
         /// <summary>

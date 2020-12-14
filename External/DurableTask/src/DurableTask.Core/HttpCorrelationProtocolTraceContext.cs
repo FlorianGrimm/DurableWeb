@@ -11,19 +11,15 @@
 //  limitations under the License.
 //  ----------------------------------------------------------------------------------
 
-namespace DurableTask.Core
-{
+namespace DurableTask.Core {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using System.Text;
 
     /// <summary>
     /// HttpCorrelationProtocolTraceContext keep the correlation value with HTTP Correlation Protocol
     /// </summary>
-    public class HttpCorrelationProtocolTraceContext : TraceContextBase
-    {
+    public class HttpCorrelationProtocolTraceContext : TraceContextBase {
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -40,54 +36,50 @@ namespace DurableTask.Core
         public string ParentParentId { get; set; }
 
         /// <inheritdoc />
-        public override void SetParentAndStart(TraceContextBase parentTraceContext)
-        {
-            CurrentActivity = new Activity(this.OperationName);
-            CurrentActivity.SetIdFormat(ActivityIdFormat.Hierarchical);
+        public override void SetParentAndStart(TraceContextBase parentTraceContext) {
+            this.CurrentActivity = new Activity(this.OperationName);
+            this.CurrentActivity.SetIdFormat(ActivityIdFormat.Hierarchical);
 
-            if (parentTraceContext is HttpCorrelationProtocolTraceContext)
-            {
-                var context = (HttpCorrelationProtocolTraceContext)parentTraceContext;
-                 CurrentActivity.SetParentId(context.ParentId); // TODO check if it is context.ParentId or context.CurrentActivity.Id 
-                OrchestrationTraceContexts = context.OrchestrationTraceContexts.Clone();
+            if (parentTraceContext is HttpCorrelationProtocolTraceContext context) {
+                this.CurrentActivity.SetParentId(context.ParentId); // TODO check if it is context.ParentId or context.CurrentActivity.Id 
+                this.OrchestrationTraceContexts = context.OrchestrationTraceContexts.Clone();
             }
 
-            CurrentActivity.Start();
+            this.CurrentActivity.Start();
 
-            ParentId = CurrentActivity.Id;
-            StartTime = CurrentActivity.StartTimeUtc;
-            ParentParentId = CurrentActivity.ParentId;
-
-            CorrelationTraceContext.Current = this;
-        }
-
-        /// <inheritdoc />
-        public override void StartAsNew()
-        {
-            CurrentActivity = new Activity(this.OperationName);
-            CurrentActivity.SetIdFormat(ActivityIdFormat.Hierarchical);
-            CurrentActivity.Start();
-
-            ParentId = CurrentActivity.Id;
-            StartTime = CurrentActivity.StartTimeUtc;
-            ParentParentId = CurrentActivity.ParentId;
+            this.ParentId = this.CurrentActivity.Id;
+            this.StartTime = this.CurrentActivity.StartTimeUtc;
+            this.ParentParentId = this.CurrentActivity.ParentId;
 
             CorrelationTraceContext.Current = this;
         }
 
         /// <inheritdoc />
-        public override TimeSpan Duration => CurrentActivity?.Duration ?? DateTimeOffset.UtcNow - StartTime;
+        public override void StartAsNew() {
+            this.CurrentActivity = new Activity(this.OperationName);
+            this.CurrentActivity.SetIdFormat(ActivityIdFormat.Hierarchical);
+            this.CurrentActivity.Start();
+
+            this.ParentId = this.CurrentActivity.Id;
+            this.StartTime = this.CurrentActivity.StartTimeUtc;
+            this.ParentParentId = this.CurrentActivity.ParentId;
+
+            CorrelationTraceContext.Current = this;
+        }
 
         /// <inheritdoc />
-        public override string TelemetryId => CurrentActivity?.Id ?? ParentId;
+        public override TimeSpan Duration => this.CurrentActivity?.Duration ?? DateTimeOffset.UtcNow - this.StartTime;
 
         /// <inheritdoc />
-        public override string TelemetryContextOperationId => CurrentActivity?.RootId ?? GetRootId(ParentId);
+        public override string TelemetryId => this.CurrentActivity?.Id ?? this.ParentId;
 
         /// <inheritdoc />
-        public override string TelemetryContextOperationParentId => CurrentActivity?.ParentId ?? ParentParentId;
+        public override string TelemetryContextOperationId => this.CurrentActivity?.RootId ?? this.GetRootId(this.ParentId);
+
+        /// <inheritdoc />
+        public override string TelemetryContextOperationParentId => this.CurrentActivity?.ParentId ?? this.ParentParentId;
 
         // internal use. Make it internal for testability.
-        internal string GetRootId(string id) =>  id?.Split('.').FirstOrDefault()?.Replace("|", "");        
+        internal string GetRootId(string id) => id?.Split('.').FirstOrDefault()?.Replace("|", "");
     }
 }

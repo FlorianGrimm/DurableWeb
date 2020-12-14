@@ -53,22 +53,22 @@ namespace Dynamitey.DynamicObjects
         {
             if (contents == null)
             {
-                _list = new List<object>();
+                this._list = new List<object>();
                 return;
             }
             if (contents is IList<object>)
             {
-                _list = contents as IList<object>;
+                this._list = contents as IList<object>;
             }
             else
             {
-                _list = contents.ToList();
+                this._list = contents.ToList();
             }
         }
 
         IEnumerator<KeyValuePair<string, object>> IEnumerable<KeyValuePair<string, object>>.GetEnumerator()
         {
-            return _dictionary.GetEnumerator();
+            return this._dictionary.GetEnumerator();
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public IEnumerator<dynamic> GetEnumerator()
         {
-            return _list.GetEnumerator();
+            return this._list.GetEnumerator();
         }
 
 
@@ -98,10 +98,10 @@ namespace Dynamitey.DynamicObjects
         {
             lock (ListLock)
             {
-                _list.Clear();
+                this._list.Clear();
 
-            } 
-            OnCollectionChanged(NotifyCollectionChangedAction.Reset);
+            }
+            this.OnCollectionChanged(NotifyCollectionChangedAction.Reset);
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace Dynamitey.DynamicObjects
         /// </returns>
         public bool Contains(dynamic item)
         {
-            return _list.Contains(item);
+            return this._list.Contains(item);
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Dynamitey.DynamicObjects
         /// <param name="arrayIndex">Index of the array.</param>
         public void CopyTo(object[] array, int arrayIndex)
         {
-            _list.CopyTo(array, arrayIndex);
+            this._list.CopyTo(array, arrayIndex);
         }
 
 
@@ -132,7 +132,7 @@ namespace Dynamitey.DynamicObjects
         /// Gets the count.
         /// </summary>
         /// <value>The count.</value>
-        public int Count => _list.Count;
+        public int Count => this._list.Count;
 
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace Dynamitey.DynamicObjects
         {
             lock (ListLock)
             {
-                return _list.IndexOf(item);
+                return this._list.IndexOf(item);
             }
         }
 
@@ -164,16 +164,16 @@ namespace Dynamitey.DynamicObjects
             {
                 if (!index.HasValue)
                 {
-                    index = _list.Count;
-                    _list.Add(item);
+                    index = this._list.Count;
+                    this._list.Add(item);
                    
                 }
                 else
                 {
-                    _list.Insert(index.Value, item);
+                    this._list.Insert(index.Value, item);
                 }
             }
-            OnCollectionChanged(NotifyCollectionChangedAction.Add, newItem: item, newIndex: index);
+            this.OnCollectionChanged(NotifyCollectionChangedAction.Add, newItem: item, newIndex: index);
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace Dynamitey.DynamicObjects
         /// <param name="index">The index.</param>
         public void RemoveAt(int index)
         {
-            RemoveHelper(index: index);
+            this.RemoveHelper(index: index);
         }
 
         /// <summary>
@@ -202,15 +202,15 @@ namespace Dynamitey.DynamicObjects
             {
                 if (item != null)
                 {
-                    index = _list.IndexOf(item);
+                    index = this._list.IndexOf(item);
                     if (index < 0)
                         return false;
                 }
 
-                item  = item ?? _list[index.GetValueOrDefault()];
-                _list.RemoveAt(index.GetValueOrDefault());
-            } 
-            OnCollectionChanged(NotifyCollectionChangedAction.Remove, oldItem: item, oldIndex: index);
+                item  = item ?? this._list[index.GetValueOrDefault()];
+                this._list.RemoveAt(index.GetValueOrDefault());
+            }
+            this.OnCollectionChanged(NotifyCollectionChangedAction.Remove, oldItem: item, oldIndex: index);
 
             return true;
         }
@@ -225,14 +225,14 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public dynamic this[int index]
         {
-            get => _list[index];
+            get => this._list[index];
             set
             {
                 object tOld;
                 lock (ListLock)
                 {
-                    tOld = _list[index];
-                    _list[index] = value;
+                    tOld = this._list[index];
+                    this._list[index] = value;
                 }
 
                 OnCollectionChanged(NotifyCollectionChangedAction.Replace, tOld, value, index);
@@ -241,7 +241,7 @@ namespace Dynamitey.DynamicObjects
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
 
 
@@ -278,15 +278,15 @@ namespace Dynamitey.DynamicObjects
             switch (action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    OnPropertyChanged("Count");
+                    this.OnPropertyChanged("Count");
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    OnPropertyChanged("Count");
+                    this.OnPropertyChanged("Count");
                     break;
                 case NotifyCollectionChangedAction.Replace:
                     break;
                 case NotifyCollectionChangedAction.Reset:
-                    OnPropertyChanged("Count");
+                    this.OnPropertyChanged("Count");
                     break;
             }
         }
@@ -299,7 +299,7 @@ namespace Dynamitey.DynamicObjects
         dynamic IDictionary<string, object>.this[string key]
         {
          
-            get => _dictionary[key];
+            get => this._dictionary[key];
             set => SetProperty(key, value);
         }
 
@@ -312,7 +312,7 @@ namespace Dynamitey.DynamicObjects
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return base.Equals(other) && Equals(other._list, _list);
+            return base.Equals(other) && Equals(other._list, this._list);
         }
 
         /// <summary>
@@ -326,7 +326,7 @@ namespace Dynamitey.DynamicObjects
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return Equals(obj as List);
+            return this.Equals(obj as List);
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace Dynamitey.DynamicObjects
         {
             unchecked
             {
-                return (base.GetHashCode()*397) ^ _list.GetHashCode();
+                return (base.GetHashCode()*397) ^ this._list.GetHashCode();
             }
         }
 
@@ -372,7 +372,7 @@ namespace Dynamitey.DynamicObjects
         /// <param name="index">The index.</param>
         public void CopyTo(Array array, int index)
         {
-            ((IList)_list).CopyTo(array, index);
+            ((IList)this._list).CopyTo(array, index);
         }
         private readonly object _syncRoot = new object();
 
@@ -383,7 +383,7 @@ namespace Dynamitey.DynamicObjects
         /// <value>
         /// The sync root.
         /// </value>
-        public object SyncRoot => _syncRoot;
+        public object SyncRoot => this._syncRoot;
 
 
         /// <summary>
@@ -401,13 +401,13 @@ namespace Dynamitey.DynamicObjects
 
         int IList.Add(object value)
         {
-            Add(value);
-            return Count - 1;
+            this.Add(value);
+            return this.Count - 1;
         }
 
         void IList.Remove(object value)
         {
-            Remove(value);
+            this.Remove(value);
         }
 
         /// <summary>

@@ -30,8 +30,8 @@ namespace DurableTask.Core
         public NameValueObjectCreator(string name, string version, Type type)
             : base(type)
         {
-            Name = name;
-            Version = version;
+            this.Name = name;
+            this.Version = version;
         }
 
         /// <summary>
@@ -43,8 +43,8 @@ namespace DurableTask.Core
         public NameValueObjectCreator(string name, string version, T instance)
             : base(instance)
         {
-            Name = name;
-            Version = version;
+            this.Name = name;
+            this.Version = version;
         }
     }
 }

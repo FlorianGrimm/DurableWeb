@@ -47,8 +47,8 @@ namespace Dynamitey.Internal
 
             internal Curry(object target, int? totalArgCount=null)
              {
-                 _target = target;
-                _totalArgCount = totalArgCount;
+            this._target = target;
+            this._totalArgCount = totalArgCount;
              }
 
 
@@ -99,7 +99,7 @@ namespace Dynamitey.Internal
             /// </returns>
            public override bool  TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
            {
-               result = new PartialApply(_target, Util.NameArgsIfNecessary(binder.CallInfo, args), binder.Name, _totalArgCount);
+               result = new PartialApply(this._target, Util.NameArgsIfNecessary(binder.CallInfo, args), binder.Name, this._totalArgCount);
                return true;
            }
            /// <summary>
@@ -113,7 +113,7 @@ namespace Dynamitey.Internal
            /// </returns>
             public override bool  TryInvoke(InvokeBinder binder, object[] args, out object result)
             {
-                var tCurrying = _target as PartialApply;
+                var tCurrying = this._target as PartialApply;
 
                 
                var  curryResult = tCurrying != null
@@ -121,7 +121,7 @@ namespace Dynamitey.Internal
                              ? new PartialApply(tCurrying.Target,
                                             tCurrying.Args.Concat(Util.NameArgsIfNecessary(binder.CallInfo, args)).
                                                 ToArray(), tCurrying.MemberName, tCurrying.TotalArgCount, tCurrying.InvocationKind)
-                             : new PartialApply(_target, Util.NameArgsIfNecessary(binder.CallInfo, args), String.Empty, _totalArgCount);
+                             : new PartialApply(this._target, Util.NameArgsIfNecessary(binder.CallInfo, args), String.Empty, this._totalArgCount);
 
 
                result = curryResult;

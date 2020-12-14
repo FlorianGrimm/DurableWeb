@@ -81,7 +81,7 @@ namespace DurableTask.Core
             object input,
             DateTime startAt)
         {
-            return InternalCreateOrchestrationInstanceWithRaisedEventAsync(
+            return this.InternalCreateOrchestrationInstanceWithRaisedEventAsync(
                 NameVersionHelper.GetDefaultName(orchestrationType),
                 NameVersionHelper.GetDefaultVersion(orchestrationType),
                 null,
@@ -107,7 +107,7 @@ namespace DurableTask.Core
             object input,
             DateTime startAt)
         {
-            return InternalCreateOrchestrationInstanceWithRaisedEventAsync(
+            return this.InternalCreateOrchestrationInstanceWithRaisedEventAsync(
                 NameVersionHelper.GetDefaultName(orchestrationType),
                 NameVersionHelper.GetDefaultVersion(orchestrationType),
                 instanceId,
@@ -147,7 +147,7 @@ namespace DurableTask.Core
         /// <returns>OrchestrationInstance that represents the orchestration that was created</returns>
         public Task<OrchestrationInstance> CreateOrchestrationInstanceAsync(Type orchestrationType, object input, DateTime startAt)
         {
-            return InternalCreateOrchestrationInstanceWithRaisedEventAsync(
+            return this.InternalCreateOrchestrationInstanceWithRaisedEventAsync(
                 NameVersionHelper.GetDefaultName(orchestrationType),
                 NameVersionHelper.GetDefaultVersion(orchestrationType),
                 null,
@@ -577,7 +577,7 @@ namespace DurableTask.Core
             TraceContextBase requestTraceContext = null;
 
             // correlation 
-            CorrelationTraceClient.Propagate(()=> { requestTraceContext = CreateOrExtractRequestTraceContext(eventName); });
+            CorrelationTraceClient.Propagate(()=> { requestTraceContext = this.CreateOrExtractRequestTraceContext(eventName); });
 
             if (string.IsNullOrWhiteSpace(orchestrationInstanceId))
             {
@@ -608,7 +608,7 @@ namespace DurableTask.Core
 
             this.logHelper.SchedulingOrchestration(startedEvent);
             
-            CorrelationTraceClient.Propagate(() => CreateAndTrackDependencyTelemetry(requestTraceContext));
+            CorrelationTraceClient.Propagate(() => this.CreateAndTrackDependencyTelemetry(requestTraceContext));
 
             // Raised events and create orchestration calls use different methods so get handled separately
             await this.ServiceClient.CreateTaskOrchestrationAsync(startMessage, dedupeStatuses);

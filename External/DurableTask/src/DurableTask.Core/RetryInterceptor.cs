@@ -64,7 +64,7 @@ namespace DurableTask.Core
                     lastException = e;
                 }
 
-                TimeSpan nextDelay = ComputeNextDelay(retryCount, firstAttempt, lastException);
+                TimeSpan nextDelay = this.ComputeNextDelay(retryCount, firstAttempt, lastException);
                 if (nextDelay == TimeSpan.Zero)
                 {
                     break;

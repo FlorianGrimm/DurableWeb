@@ -11,8 +11,7 @@
 //  limitations under the License.
 //  ----------------------------------------------------------------------------------
 
-namespace DurableTask.Core
-{
+namespace DurableTask.Core {
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Serialization;
 
@@ -20,8 +19,7 @@ namespace DurableTask.Core
     /// Represents the state of an orchestration instance
     /// </summary>
     [DataContract]
-    public class OrchestrationInstance : IExtensibleDataObject
-    {
+    public class OrchestrationInstance : IExtensibleDataObject {
         /// <summary>
         /// The instance id, assigned as unique to the orchestration
         /// </summary>
@@ -34,10 +32,8 @@ namespace DurableTask.Core
         [DataMember]
         public string ExecutionId { get; set; }
 
-        internal OrchestrationInstance Clone()
-        {
-            return new OrchestrationInstance
-            {
+        internal OrchestrationInstance Clone() {
+            return new OrchestrationInstance {
                 ExecutionId = ExecutionId,
                 InstanceId = InstanceId
             };
@@ -50,8 +46,7 @@ namespace DurableTask.Core
         /// A hash code for the current object.
         /// </returns>
         [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
-        public override int GetHashCode()
-        {
+        public override int GetHashCode() {
             return (this.InstanceId ?? string.Empty).GetHashCode() ^ (this.ExecutionId ?? string.Empty).GetHashCode();
         }
 
@@ -61,8 +56,7 @@ namespace DurableTask.Core
         /// <returns>
         /// A string that represents the current object.
         /// </returns>
-        public override string ToString()
-        {
+        public override string ToString() {
             return $"[InstanceId: {this.InstanceId}, ExecutionId: {this.ExecutionId}]";
         }
 

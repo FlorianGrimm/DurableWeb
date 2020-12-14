@@ -112,13 +112,13 @@ namespace Dynamitey
         /// <param name="args">The args.</param>
         public Activate(Type type, params object[] args)
         {
-            Type = type;
+            this.Type = type;
 
             var tArg = args.OfType<Func<object[]>>().SingleOrDefault();
             if (tArg != null)
-                Arguments = tArg;
+                this.Arguments = tArg;
             else
-                Arguments = () => args;
+                this.Arguments = () => args;
             
         }
 
@@ -130,8 +130,8 @@ namespace Dynamitey
         /// <param name="args">The args.</param>
         public Activate(Type type, Func<object[]> args)
         {
-            Type = type;
-            Arguments = args;
+            this.Type = type;
+            this.Arguments = args;
         }
         /// <summary>
         /// Gets or sets the constructor type.
@@ -154,8 +154,8 @@ namespace Dynamitey
         /// <returns></returns>
         public virtual dynamic Create()
         {
-            object[] tArgs = Arguments();
-            return Dynamic.InvokeConstructor(Type, tArgs);
+            object[] tArgs = this.Arguments();
+            return Dynamic.InvokeConstructor(this.Type, tArgs);
         }
     }
 
@@ -188,7 +188,7 @@ namespace Dynamitey
         /// <returns></returns>
         public override dynamic Create()
         {
-            var tArgs = Arguments();
+            var tArgs = this.Arguments();
 
             if(tArgs.Any())
                 return base.Create();

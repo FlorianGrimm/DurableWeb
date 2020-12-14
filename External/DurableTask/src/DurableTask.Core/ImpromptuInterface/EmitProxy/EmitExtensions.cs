@@ -45,9 +45,9 @@ namespace ImpromptuInterface.Build
             ///<param name="generator"></param>
             public BranchTrueOverBlock(ILGenerator generator)
             {
-                _generator = generator;
-                _label = generator.DefineLabel();
-                _generator.Emit(OpCodes.Brtrue, _label);
+                this._generator = generator;
+                this._label = generator.DefineLabel();
+                this._generator.Emit(OpCodes.Brtrue, this._label);
             }
 
             /// <summary>
@@ -56,7 +56,7 @@ namespace ImpromptuInterface.Build
             public void Dispose()
             {
                 //_generator.Emit(OpCodes.Br_S, _label);
-                _generator.MarkLabel(_label);
+                this._generator.MarkLabel(this._label);
             }
         }
 
@@ -71,9 +71,9 @@ namespace ImpromptuInterface.Build
             ///<param name="generator"></param>
             public BranchFalseOverBlock(ILGenerator generator)
             {
-                _generator = generator;
-                _label = generator.DefineLabel();
-                _generator.Emit(OpCodes.Brfalse, _label);
+                this._generator = generator;
+                this._label = generator.DefineLabel();
+                this._generator.Emit(OpCodes.Brfalse, this._label);
             }
 
             /// <summary>
@@ -82,7 +82,7 @@ namespace ImpromptuInterface.Build
             public void Dispose()
             {
                 //_generator.Emit(OpCodes.Br_S, _label);
-                _generator.MarkLabel(_label);
+                this._generator.MarkLabel(this._label);
             }
         }
         /// <summary>

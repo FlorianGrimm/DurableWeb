@@ -80,7 +80,7 @@ namespace Dynamitey.DynamicObjects
         public LateType(string typeName)
             : base(FindType(typeName))
         {
-            TypeName = typeName;
+            this.TypeName = typeName;
           
         }
 
@@ -92,7 +92,7 @@ namespace Dynamitey.DynamicObjects
         public LateType(Assembly assembly, string typeName)
             : base(FindType(typeName, assembly))
         {
-            TypeName = typeName;
+            this.TypeName = typeName;
 
         }
 
@@ -100,7 +100,7 @@ namespace Dynamitey.DynamicObjects
         /// Returns a late bound constructor
         /// </summary>
         /// <value>The late bound constructor</value>
-        public dynamic @new => new ConstructorForward((Type)Target);
+        public dynamic @new => new ConstructorForward((Type)this.Target);
 
         /// <summary>
         /// Forward argument to constructor including named arguments
@@ -110,7 +110,7 @@ namespace Dynamitey.DynamicObjects
             private readonly Type _type;
             internal ConstructorForward(Type type)
             {
-                _type = type;
+                this._type = type;
             }
             /// <summary>
             /// Tries the invoke.
@@ -121,7 +121,7 @@ namespace Dynamitey.DynamicObjects
             /// <returns></returns>
             public override bool TryInvoke(InvokeBinder binder, object[] args, out object result)
             {
-                result = Dynamic.InvokeConstructor(_type, Util.NameArgsIfNecessary(binder.CallInfo, args));
+                result = Dynamic.InvokeConstructor(this._type, Util.NameArgsIfNecessary(binder.CallInfo, args));
                 return true;
             }
 
@@ -133,7 +133,7 @@ namespace Dynamitey.DynamicObjects
         /// <value>
         /// 	<c>true</c> if this instance is available; otherwise, <c>false</c>.
         /// </value>
-        public bool IsAvailable => Target != null;
+        public bool IsAvailable => this.Target != null;
 
 
         /// <summary>
@@ -147,10 +147,10 @@ namespace Dynamitey.DynamicObjects
         {
             get
             {
-                if(Target ==null)
-                    throw new MissingTypeException(TypeName);
+                if(this.Target ==null)
+                    throw new MissingTypeException(this.TypeName);
 
-                return InvokeContext.CreateStatic((Type)Target);
+                return InvokeContext.CreateStatic((Type)this.Target);
             }
         }
     

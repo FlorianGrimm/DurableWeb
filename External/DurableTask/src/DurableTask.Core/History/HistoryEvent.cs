@@ -11,8 +11,7 @@
 //  limitations under the License.
 //  ----------------------------------------------------------------------------------
 
-namespace DurableTask.Core.History
-{
+namespace DurableTask.Core.History {
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -23,14 +22,12 @@ namespace DurableTask.Core.History
     /// </summary>
     [DataContract]
     [KnownTypeAttribute("KnownTypes")]
-    public abstract class HistoryEvent : IExtensibleDataObject
-    {
+    public abstract class HistoryEvent : IExtensibleDataObject {
         /// <summary>
         /// List of all event classes, for use by the DataContractSerializer
         /// </summary>
         /// <returns></returns>
-        public static IEnumerable<Type> KnownTypes()
-        {
+        public static IEnumerable<Type> KnownTypes() {
             yield return typeof(ExecutionStartedEvent);
             yield return typeof(ExecutionCompletedEvent);
             yield return typeof(ExecutionTerminatedEvent);
@@ -53,21 +50,19 @@ namespace DurableTask.Core.History
         /// <summary>
         /// Creates a new history event
         /// </summary>
-        internal HistoryEvent()
-        {
-            IsPlayed = false;
-            Timestamp = DateTime.UtcNow;
+        internal HistoryEvent() {
+            this.IsPlayed = false;
+            this.Timestamp = DateTime.UtcNow;
         }
 
         /// <summary>
         /// Creates a new history event with the supplied event id
         /// </summary>
         /// <param name="eventId">The integer event id</param>
-        protected HistoryEvent(int eventId)
-        {
-            EventId = eventId;
-            IsPlayed = false;
-            Timestamp = DateTime.UtcNow;
+        protected HistoryEvent(int eventId) {
+            this.EventId = eventId;
+            this.IsPlayed = false;
+            this.Timestamp = DateTime.UtcNow;
         }
 
         /// <summary>

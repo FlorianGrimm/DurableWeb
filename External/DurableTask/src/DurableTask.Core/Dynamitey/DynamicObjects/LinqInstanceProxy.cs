@@ -46,12 +46,12 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public IEnumerator<object> GetEnumerator()
         {
-            return ((dynamic) CallTarget).GetEnumerator();
+            return ((dynamic)this.CallTarget).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
     }
 

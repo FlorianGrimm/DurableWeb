@@ -30,8 +30,8 @@ namespace DurableTask.Core.History
         public ExecutionCompletedEvent(int eventId, string result, OrchestrationStatus orchestrationStatus)
             : base(eventId)
         {
-            Result = result;
-            OrchestrationStatus = orchestrationStatus;
+            this.Result = result;
+            this.OrchestrationStatus = orchestrationStatus;
         }
 
         /// <summary>

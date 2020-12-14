@@ -30,8 +30,8 @@ namespace DurableTask.Core.History
         public TaskCompletedEvent(int eventId, int taskScheduledId, string result)
             : base(eventId)
         {
-            TaskScheduledId = taskScheduledId;
-            Result = result;
+            this.TaskScheduledId = taskScheduledId;
+            this.Result = result;
         }
 
         /// <summary>

@@ -30,7 +30,7 @@ namespace DurableTask.Core
         {
             lock (this.thisLock)
             {
-                string key = GetKey(creator.Name, creator.Version);
+                string key = this.GetKey(creator.Name, creator.Version);
 
                 if (this.creators.ContainsKey(key))
                 {
@@ -44,7 +44,7 @@ namespace DurableTask.Core
 
         public T GetObject(string name, string version)
         {
-            string key = GetKey(name, version);
+            string key = this.GetKey(name, version);
 
             lock (this.thisLock)
             {

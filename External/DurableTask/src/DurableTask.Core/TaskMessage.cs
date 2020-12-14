@@ -11,17 +11,16 @@
 //  limitations under the License.
 //  ----------------------------------------------------------------------------------
 
-namespace DurableTask.Core
-{
+namespace DurableTask.Core {
     using System.Runtime.Serialization;
+
     using DurableTask.Core.History;
 
     /// <summary>
     /// Wire level transport object for task messages containing events and orchestration instance information
     /// </summary>
     [DataContract]
-    public class TaskMessage : IExtensibleDataObject
-    {
+    public class TaskMessage : IExtensibleDataObject {
         /// <summary>
         /// Event information for this task message
         /// </summary>

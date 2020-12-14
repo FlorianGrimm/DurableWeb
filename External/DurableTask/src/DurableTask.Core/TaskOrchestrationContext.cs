@@ -34,11 +34,11 @@ namespace DurableTask.Core
         private bool executionTerminated;
         private int idCounter;
 
-        public bool HasContinueAsNew => continueAsNew != null;
+        public bool HasContinueAsNew => this.continueAsNew != null;
 
         public void AddEventToNextIteration(HistoryEvent he)
         {
-            continueAsNew.CarryoverEvents.Add(he);
+            this.continueAsNew.CarryoverEvents.Add(he);
         }
 
         public TaskOrchestrationContext(OrchestrationInstance orchestrationInstance, TaskScheduler taskScheduler)
@@ -50,8 +50,8 @@ namespace DurableTask.Core
             this.idCounter = 0;
             this.MessageDataConverter = new JsonDataConverter();
             this.ErrorDataConverter = new JsonDataConverter();
-            OrchestrationInstance = orchestrationInstance;
-            IsReplaying = false;
+            this.OrchestrationInstance = orchestrationInstance;
+            this.IsReplaying = false;
         }
 
         public IEnumerable<OrchestratorAction> OrchestratorActions => this.orchestratorActionsMap.Values;
@@ -61,13 +61,13 @@ namespace DurableTask.Core
         internal void ClearPendingActions()
         {
             this.orchestratorActionsMap.Clear();
-            continueAsNew = null;
+            this.continueAsNew = null;
         }
 
         public override async Task<TResult> ScheduleTask<TResult>(string name, string version,
             params object[] parameters)
         {
-            TResult result = await ScheduleTaskToWorker<TResult>(name, version, null, parameters);
+            TResult result = await this.ScheduleTaskToWorker<TResult>(name, version, null, parameters);
 
             return result;
         }
@@ -75,7 +75,7 @@ namespace DurableTask.Core
         public async Task<TResult> ScheduleTaskToWorker<TResult>(string name, string version, string taskList,
             params object[] parameters)
         {
-            object result = await ScheduleTaskInternal(name, version, taskList, typeof(TResult), parameters);
+            object result = await this.ScheduleTaskInternal(name, version, taskList, typeof(TResult), parameters);
 
             return (TResult)result;
         }
@@ -110,7 +110,7 @@ namespace DurableTask.Core
             string instanceId,
             object input)
         {
-            return CreateSubOrchestrationInstanceCore<T>(name, version, instanceId, input, null);
+            return this.CreateSubOrchestrationInstanceCore<T>(name, version, instanceId, input, null);
         }
 
         public override Task<T> CreateSubOrchestrationInstance<T>(
@@ -120,7 +120,7 @@ namespace DurableTask.Core
             object input,
             IDictionary<string, string> tags)
         {
-            return CreateSubOrchestrationInstanceCore<T>(name, version, instanceId, input, tags);
+            return this.CreateSubOrchestrationInstanceCore<T>(name, version, instanceId, input, tags);
         }
 
         public override Task<T> CreateSubOrchestrationInstance<T>(
@@ -128,7 +128,7 @@ namespace DurableTask.Core
             string version,
             object input)
         {
-            return CreateSubOrchestrationInstanceCore<T>(name, version, null, input, null);
+            return this.CreateSubOrchestrationInstanceCore<T>(name, version, null, input, null);
         }
 
         async Task<T> CreateSubOrchestrationInstanceCore<T>(
@@ -144,7 +144,7 @@ namespace DurableTask.Core
             string actualInstanceId = instanceId;
             if (string.IsNullOrWhiteSpace(actualInstanceId))
             {
-                actualInstanceId = OrchestrationInstance.ExecutionId + ":" + id;
+                actualInstanceId = this.OrchestrationInstance.ExecutionId + ":" + id;
             }
 
             var action = new CreateSubOrchestrationAction
@@ -198,12 +198,12 @@ namespace DurableTask.Core
 
         public override void ContinueAsNew(object input)
         {
-            ContinueAsNew(null, input);
+            this.ContinueAsNew(null, input);
         }
 
         public override void ContinueAsNew(string newVersion, object input)
         {
-            ContinueAsNewCore(newVersion, input);
+            this.ContinueAsNewCore(newVersion, input);
         }
 
         void ContinueAsNewCore(string newVersion, object input)
@@ -220,7 +220,7 @@ namespace DurableTask.Core
 
         public override Task<T> CreateTimer<T>(DateTime fireAt, T state)
         {
-            return CreateTimer(fireAt, state, CancellationToken.None);
+            return this.CreateTimer(fireAt, state, CancellationToken.None);
         }
 
         public override async Task<T> CreateTimer<T>(DateTime fireAt, T state, CancellationToken cancelToken)
@@ -334,7 +334,7 @@ namespace DurableTask.Core
             }
             else
             {
-                LogDuplicateEvent("TaskCompleted", completedEvent, taskId);
+                this.LogDuplicateEvent("TaskCompleted", completedEvent, taskId);
             }
         }
 
@@ -356,7 +356,7 @@ namespace DurableTask.Core
             }
             else
             {
-                LogDuplicateEvent("TaskFailed", failedEvent, taskId);
+                this.LogDuplicateEvent("TaskFailed", failedEvent, taskId);
             }
         }
 
@@ -372,7 +372,7 @@ namespace DurableTask.Core
             }
             else
             {
-                LogDuplicateEvent("SubOrchestrationInstanceCompleted", completedEvent, taskId);
+                this.LogDuplicateEvent("SubOrchestrationInstanceCompleted", completedEvent, taskId);
             }
         }
 
@@ -393,7 +393,7 @@ namespace DurableTask.Core
             }
             else
             {
-                LogDuplicateEvent("SubOrchestrationInstanceFailed", failedEvent, taskId);
+                this.LogDuplicateEvent("SubOrchestrationInstanceFailed", failedEvent, taskId);
             }
         }
 
@@ -408,7 +408,7 @@ namespace DurableTask.Core
             }
             else
             {
-                LogDuplicateEvent("TimerFired", timerFiredEvent, taskId);
+                this.LogDuplicateEvent("TimerFired", timerFiredEvent, taskId);
             }
         }
 
@@ -417,7 +417,7 @@ namespace DurableTask.Core
             TraceHelper.TraceSession(
                 TraceEventType.Warning,
                 "TaskOrchestrationContext-DuplicateEvent",
-                OrchestrationInstance.InstanceId,
+                this.OrchestrationInstance.InstanceId,
                 "Duplicate {0} Event: {1}, type: {2}, ts: {3}",
                 source,
                 taskId.ToString(),
@@ -430,7 +430,7 @@ namespace DurableTask.Core
             if (!this.executionTerminated)
             {
                 this.executionTerminated = true;
-                CompleteOrchestration(terminatedEvent.Input, null, OrchestrationStatus.Terminated);
+                this.CompleteOrchestration(terminatedEvent.Input, null, OrchestrationStatus.Terminated);
             }
         }
 
@@ -438,7 +438,7 @@ namespace DurableTask.Core
         {
             if (!this.executionTerminated)
             {
-                CompleteOrchestration(result, null, OrchestrationStatus.Completed);
+                this.CompleteOrchestration(result, null, OrchestrationStatus.Completed);
             }
         }
 
@@ -467,7 +467,7 @@ namespace DurableTask.Core
                 details = $"Unhandled exception while executing orchestration: {failure}\n\t{failure.StackTrace}";
             }
 
-            CompleteOrchestration(reason, details, OrchestrationStatus.Failed);
+            this.CompleteOrchestration(reason, details, OrchestrationStatus.Failed);
         }
 
         public void CompleteOrchestration(string result, string details, OrchestrationStatus orchestrationStatus)

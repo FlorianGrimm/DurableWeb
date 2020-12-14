@@ -52,7 +52,7 @@ namespace ImpromptuInterface.Build
         /// <value></value>
         private dynamic ActLikeProxyOriginal { get; set; }
 
-        dynamic IActLikeProxy.Original { get { return ActLikeProxyOriginal; } }
+        dynamic IActLikeProxy.Original { get { return this.ActLikeProxyOriginal; } }
 
         private bool _init = false;
 
@@ -67,14 +67,14 @@ namespace ImpromptuInterface.Build
             if(((object)original) == null)
                 throw new ArgumentNullException("original", "Can't proxy a Null value");
 
-            if (_init)
+            if (this._init)
                 throw new MethodAccessException("Initialize should not be called twice!");
-            _init = true;
-            ActLikeProxyOriginal = original;
+            this._init = true;
+            this.ActLikeProxyOriginal = original;
 
 
 
-            var dynamicObj = ActLikeProxyOriginal as IEquivalentType;
+            var dynamicObj = this.ActLikeProxyOriginal as IEquivalentType;
             if (dynamicObj != null)
             {
                 if (interfaces != null)
@@ -108,9 +108,9 @@ namespace ImpromptuInterface.Build
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (ReferenceEquals(ActLikeProxyOriginal, obj)) return true;
-            if (!(obj is ActLikeProxy)) return ActLikeProxyOriginal.Equals(obj);
-            return Equals((ActLikeProxy) obj);
+            if (ReferenceEquals(this.ActLikeProxyOriginal, obj)) return true;
+            if (!(obj is ActLikeProxy)) return this.ActLikeProxyOriginal.Equals(obj);
+            return this.Equals((ActLikeProxy) obj);
         }
 
         /// <summary>
@@ -122,8 +122,8 @@ namespace ImpromptuInterface.Build
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            if (ReferenceEquals(ActLikeProxyOriginal, other.ActLikeProxyOriginal)) return true;
-            return Equals(other.ActLikeProxyOriginal, ActLikeProxyOriginal);
+            if (ReferenceEquals(this.ActLikeProxyOriginal, other.ActLikeProxyOriginal)) return true;
+            return Equals(other.ActLikeProxyOriginal, this.ActLikeProxyOriginal);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace ImpromptuInterface.Build
         /// </returns>
         public override int GetHashCode()
         {
-            return ActLikeProxyOriginal.GetHashCode();
+            return this.ActLikeProxyOriginal.GetHashCode();
         }
 
 
@@ -149,7 +149,7 @@ namespace ImpromptuInterface.Build
             info.SetType(typeof(ActLikeProxySerializationHelper));
 			
 		    var tCustomAttr =
-                GetType().GetCustomAttributes(typeof (ActLikeProxyAttribute), false).OfType<ActLikeProxyAttribute>().
+                this.GetType().GetCustomAttributes(typeof (ActLikeProxyAttribute), false).OfType<ActLikeProxyAttribute>().
                     FirstOrDefault();
 			
 				
@@ -172,7 +172,7 @@ namespace ImpromptuInterface.Build
 			}
 
 
-            info.AddValue("Original", (object)ActLikeProxyOriginal);
+            info.AddValue("Original", (object)this.ActLikeProxyOriginal);
 
         }
 
@@ -184,7 +184,7 @@ namespace ImpromptuInterface.Build
         /// </returns>
         public override string ToString()
         {
-            return ActLikeProxyOriginal.ToString();
+            return this.ActLikeProxyOriginal.ToString();
         }
     }
 }

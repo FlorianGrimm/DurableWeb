@@ -23,14 +23,14 @@ namespace DurableTask.Core
 
         protected override void QueueTask(Task task)
         {
-            TryExecuteTask(task);
+            this.TryExecuteTask(task);
         }
 
         protected override bool TryExecuteTaskInline(
             Task task,
             bool taskWasPreviouslyQueued)
         {
-            return TryExecuteTask(task);
+            return this.TryExecuteTask(task);
         }
 
         protected override IEnumerable<Task> GetScheduledTasks()

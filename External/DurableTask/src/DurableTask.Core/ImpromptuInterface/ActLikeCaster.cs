@@ -19,14 +19,14 @@ namespace ImpromptuInterface
 
             if (binder.Type.IsInterface)
             {
-                _interfaceTypes.Insert(0, binder.Type);
-                result = Impromptu.DynamicActLike(Target, _interfaceTypes.ToArray());
+                this._interfaceTypes.Insert(0, binder.Type);
+                result = Impromptu.DynamicActLike(this.Target, this._interfaceTypes.ToArray());
                 return true;
             }
 
-            if(binder.Type.IsInstanceOfType(Target))
+            if(binder.Type.IsInstanceOfType(this.Target))
             {
-                result = Target;
+                result = this.Target;
             }
 
             return false;
@@ -35,8 +35,8 @@ namespace ImpromptuInterface
 
         public ActLikeCaster(object target, IEnumerable<Type> types)
         {
-            Target = target;
-            _interfaceTypes = types.ToList();
+            this.Target = target;
+            this._interfaceTypes = types.ToList();
         }
 
     }

@@ -40,7 +40,7 @@ namespace DurableTask.Core.Serializing
             JObject value = JObject.Load(reader);
 
             // Create target object based on JObject 
-            T target = CreateObject(objectType, value);
+            T target = this.CreateObject(objectType, value);
 
             serializer.Populate(value.CreateReader(), target);
 

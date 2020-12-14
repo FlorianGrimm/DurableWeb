@@ -11,17 +11,14 @@
 //  limitations under the License.
 //  ----------------------------------------------------------------------------------
 
-namespace DurableTask.Core
-{
+namespace DurableTask.Core {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
 
     /// <summary>
     /// An active instance / work item of an orchestration
     /// </summary>
-    public class TaskOrchestrationWorkItem
-    {
+    public class TaskOrchestrationWorkItem {
         /// <summary>
         /// The instance id of this orchestration
         /// </summary>

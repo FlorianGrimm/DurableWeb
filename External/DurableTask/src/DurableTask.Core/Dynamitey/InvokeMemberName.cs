@@ -78,8 +78,8 @@ namespace Dynamitey
         /// <param name="genericArgs">The generic args.</param>
         public InvokeMemberName(string name, params Type[] genericArgs)
         {
-            Name = name;
-            GenericArgs = genericArgs;
+            this.Name = name;
+            this.GenericArgs = genericArgs;
         }
 
         /// <summary>
@@ -89,9 +89,9 @@ namespace Dynamitey
         /// <param name="isSpecialName">if set to <c>true</c> [is special name].</param>
         public InvokeMemberName(string name, bool isSpecialName)
         {
-            Name = name;
-            GenericArgs = new Type[]{};
-            IsSpecialName = isSpecialName;
+            this.Name = name;
+            this.GenericArgs = new Type[]{};
+            this.IsSpecialName = isSpecialName;
         }
 
         /// <summary>
@@ -103,18 +103,18 @@ namespace Dynamitey
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return EqualsHelper(other);
+            return this.EqualsHelper(other);
         }
         
         private bool EqualsHelper(InvokeMemberName other)
         {
 
-            var tGenArgs = GenericArgs;
+            var tGenArgs = this.GenericArgs;
             var tOtherGenArgs = other.GenericArgs;
 
 
-            return Equals(other.Name, Name)
-                && !(other.IsSpecialName ^ IsSpecialName)
+            return Equals(other.Name, this.Name)
+                && !(other.IsSpecialName ^ this.IsSpecialName)
                 && !(tOtherGenArgs == null ^ tGenArgs == null)
                 && (tGenArgs == null || 
                 //Exclusive Or makes sure this doesn't happen
@@ -135,7 +135,7 @@ namespace Dynamitey
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (!(obj is InvokeMemberName)) return false;
-            return EqualsHelper((InvokeMemberName) obj);
+            return this.EqualsHelper((InvokeMemberName) obj);
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace Dynamitey
         {
             unchecked
             {
-                return (GenericArgs != null ? GenericArgs.Length.GetHashCode() * 397 : 0) ^ (Name.GetHashCode());
+                return (this.GenericArgs != null ? this.GenericArgs.Length.GetHashCode() * 397 : 0) ^ (this.Name.GetHashCode());
             }
         }
     }

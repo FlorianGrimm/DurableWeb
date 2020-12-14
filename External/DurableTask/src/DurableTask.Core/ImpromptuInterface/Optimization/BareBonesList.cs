@@ -33,13 +33,13 @@ namespace ImpromptuInterface.Optimization
         /// <param name="length">The max length that the list cannot grow beyound</param>
         public BareBonesList(int length)
         {
-            _list = new T[length];
-            _length = length;
+            this._list = new T[length];
+            this._length = length;
         }
 
         public void Add(T item)
         {
-            _list[_addIndex++] = item;
+            this._list[this._addIndex++] = item;
         }
 
         public void Clear()
@@ -54,7 +54,7 @@ namespace ImpromptuInterface.Optimization
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            Array.Copy(_list,arrayIndex,array,0,_length);
+            Array.Copy(this._list,arrayIndex,array,0, this._length);
         }
 
         public bool Remove(T item)
@@ -64,7 +64,7 @@ namespace ImpromptuInterface.Optimization
 
         public int Count
         {
-            get { return _length; }
+            get { return this._length; }
         }
 
         public bool IsReadOnly
@@ -78,12 +78,12 @@ namespace ImpromptuInterface.Optimization
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            return new BareBonesEnumerator(_list,_addIndex);
+            return new BareBonesEnumerator(this._list, this._addIndex);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
 
 
@@ -96,8 +96,8 @@ namespace ImpromptuInterface.Optimization
 
             public BareBonesEnumerator(T[] list, int length)
             {
-                _list = list;
-                _length = length;
+                this._list = list;
+                this._length = length;
             }
 
             public void Dispose()
@@ -107,23 +107,23 @@ namespace ImpromptuInterface.Optimization
 
             public bool MoveNext()
             {
-                _enumerateInex++;
-                return _enumerateInex < _length;
+                this._enumerateInex++;
+                return this._enumerateInex < this._length;
             }
 
             public void Reset()
             {
-                _enumerateInex = 0;
+                this._enumerateInex = 0;
             }
 
             public T Current
             {
-                get { return _list[_enumerateInex]; }
+                get { return this._list[this._enumerateInex]; }
             }
 
             object IEnumerator.Current
             {
-                get { return Current; }
+                get { return this.Current; }
             }
         }
     

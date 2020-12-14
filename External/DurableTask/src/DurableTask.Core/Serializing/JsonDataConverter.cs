@@ -58,7 +58,7 @@ namespace DurableTask.Core.Serializing
         /// <returns>Object serialized to a string</returns>
         public override string Serialize(object value)
         {
-            return Serialize(value, false);
+            return this.Serialize(value, false);
         }
 
         /// <summary>

@@ -5,6 +5,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Identity.Web" Version="1.*" />
     <PackageReference Include="Microsoft.Identity.Web.UI" Version="1.*" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\External\DurableTask\src\DurableTask.Core\DurableTask.Core.csproj" />

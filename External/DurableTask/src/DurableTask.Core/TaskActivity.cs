@@ -43,7 +43,7 @@ namespace DurableTask.Core
         /// <returns>Serialized output from the execution</returns>
         public virtual Task<string> RunAsync(TaskContext context, string input)
         {
-            return Task.FromResult(Run(context, input));
+            return Task.FromResult(this.Run(context, input));
         }
     }
 
@@ -59,7 +59,7 @@ namespace DurableTask.Core
         /// </summary>
         protected AsyncTaskActivity()
         {
-            DataConverter = new JsonDataConverter();
+            this.DataConverter = new JsonDataConverter();
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace DurableTask.Core
         /// <param name="dataConverter"></param>
         protected AsyncTaskActivity(DataConverter dataConverter)
         {
-            DataConverter = dataConverter ?? new JsonDataConverter();
+            this.DataConverter = dataConverter ?? new JsonDataConverter();
         }
 
         /// <summary>
@@ -123,22 +123,22 @@ namespace DurableTask.Core
                 else
                 {
                     string serializedValue = jToken.ToString();
-                    parameter = DataConverter.Deserialize<TInput>(serializedValue);
+                    parameter = this.DataConverter.Deserialize<TInput>(serializedValue);
                 }
             }
 
             TResult result;
             try
             {
-                result = await ExecuteAsync(context, parameter);
+                result = await this.ExecuteAsync(context, parameter);
             }
             catch (Exception e) when (!Utils.IsFatal(e) && !Utils.IsExecutionAborting(e))
             {
-                string details = Utils.SerializeCause(e, DataConverter);
+                string details = Utils.SerializeCause(e, this.DataConverter);
                 throw new TaskFailureException(e.Message, e, details);
             }
 
-            string serializedResult = DataConverter.Serialize(result);
+            string serializedResult = this.DataConverter.Serialize(result);
             return serializedResult;
         }
     }
@@ -166,7 +166,7 @@ namespace DurableTask.Core
         /// <returns>The typed output from the execution</returns>
         protected override Task<TResult> ExecuteAsync(TaskContext context, TInput input)
         {
-            return Task.FromResult(Execute(context, input));
+            return Task.FromResult(this.Execute(context, input));
         }
     }
 }

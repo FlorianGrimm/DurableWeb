@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <ProjectReference Include="..\..\External\DurableTask\src\DurableTask.Core\DurableTask.Core.csproj" />
     <ProjectReference Include="..\DurableTask.WebBase\DurableTask.WebBase.csproj" />
   </ItemGroup>

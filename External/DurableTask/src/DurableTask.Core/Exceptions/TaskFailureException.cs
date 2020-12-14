@@ -52,7 +52,7 @@ namespace DurableTask.Core.Exceptions
         public TaskFailureException(string reason, Exception innerException, string details)
             : base(reason, innerException)
         {
-            Details = details;
+            this.Details = details;
         }
 
         /// <summary>
@@ -61,12 +61,12 @@ namespace DurableTask.Core.Exceptions
         public TaskFailureException(string reason, string details)
             : base(reason)
         {
-            Details = details;
+            this.Details = details;
         }
 
         internal TaskFailureException WithFailureSource(string failureSource)
         {
-            FailureSource = failureSource;
+            this.FailureSource = failureSource;
             return this;
         }
 
@@ -76,12 +76,12 @@ namespace DurableTask.Core.Exceptions
         protected TaskFailureException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Details = info.GetString(nameof(Details));
+            this.Details = info.GetString(nameof(this.Details));
 
-            if (ExistPropertyInfo(info, nameof(FailureSource)))
+            if (this.ExistPropertyInfo(info, nameof(this.FailureSource)))
             {
                 // FailureSource is an internal property, it may not be populated by the serialization engine
-                FailureSource = info.GetString(nameof(FailureSource));
+                this.FailureSource = info.GetString(nameof(this.FailureSource));
             }
         }
 
@@ -91,8 +91,8 @@ namespace DurableTask.Core.Exceptions
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
-            info.AddValue(nameof(Details), Details);
-            info.AddValue(nameof(FailureSource), FailureSource);
+            info.AddValue(nameof(this.Details), this.Details);
+            info.AddValue(nameof(this.FailureSource), this.FailureSource);
         }
 
         /// <summary>
@@ -102,9 +102,9 @@ namespace DurableTask.Core.Exceptions
         {
             return string.Format("FailureSource: {1}{0}Details: {2}{0}Message: {3}{0}Exception: {4}",
                 Environment.NewLine,
-                FailureSource,
-                Details,
-                Message,
+                this.FailureSource,
+                this.Details,
+                this.Message,
                 base.ToString());
         }
 

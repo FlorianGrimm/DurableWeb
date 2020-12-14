@@ -34,13 +34,13 @@ namespace DurableTask.Core
                     nameof(firstRetryInterval));
             }
 
-            FirstRetryInterval = firstRetryInterval;
-            MaxNumberOfAttempts = maxNumberOfAttempts;
+            this.FirstRetryInterval = firstRetryInterval;
+            this.MaxNumberOfAttempts = maxNumberOfAttempts;
             // Defaults
-            MaxRetryInterval = TimeSpan.MaxValue;
-            BackoffCoefficient = 1;
-            RetryTimeout = TimeSpan.MaxValue;
-            Handle = e => true;
+            this.MaxRetryInterval = TimeSpan.MaxValue;
+            this.BackoffCoefficient = 1;
+            this.RetryTimeout = TimeSpan.MaxValue;
+            this.Handle = e => true;
         }
 
         /// <summary>

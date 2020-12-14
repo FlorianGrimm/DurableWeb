@@ -11,15 +11,13 @@
 //  limitations under the License.
 //  ----------------------------------------------------------------------------------
 
-namespace DurableTask.Core
-{
+namespace DurableTask.Core {
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Linq;
-    using System.Reflection;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// TraceContext keep the correlation value.
@@ -31,7 +29,7 @@ namespace DurableTask.Core
         /// </summary>
         protected TraceContextBase()
         {
-            OrchestrationTraceContexts = new Stack<TraceContextBase>();
+            this.OrchestrationTraceContexts = new Stack<TraceContextBase>();
         }
 
         static TraceContextBase()
@@ -117,9 +115,11 @@ namespace DurableTask.Core
         /// <returns></returns>
         public TraceContextBase GetCurrentOrchestrationRequestTraceContext()
         {
-            foreach(TraceContextBase element in OrchestrationTraceContexts)
+            foreach(TraceContextBase element in this.OrchestrationTraceContexts)
             {
-                if (TelemetryType.Request == element.TelemetryType) return element;
+                if (TelemetryType.Request == element.TelemetryType) { 
+                    return element;
+                }
             }
 
             throw new InvalidOperationException("Can not find RequestTraceContext");
@@ -146,14 +146,14 @@ namespace DurableTask.Core
         /// <summary>
         /// Stop TraceContext
         /// </summary>
-        public void Stop() => CurrentActivity?.Stop();
+        public void Stop() => this.CurrentActivity?.Stop();
 
         /// <summary>
         /// Set Activity.Current to CurrentActivity
         /// </summary>
         public void SetActivityToCurrent()
         {
-            Activity.Current = CurrentActivity;
+            Activity.Current = this.CurrentActivity;
         }
 
         /// <summary>

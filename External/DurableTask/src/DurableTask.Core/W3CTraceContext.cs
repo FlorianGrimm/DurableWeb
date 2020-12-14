@@ -11,18 +11,13 @@
 //  limitations under the License.
 //  ----------------------------------------------------------------------------------
 
-namespace DurableTask.Core
-{
+namespace DurableTask.Core {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Text;
 
     /// <summary>
     /// W3CTraceContext keep the correlation value with W3C TraceContext protocol
-    /// </summary>
-    public class W3CTraceContext : TraceContextBase
-    {
+    public class W3CTraceContext : TraceContextBase {
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -44,92 +39,78 @@ namespace DurableTask.Core
         public string ParentSpanId { get; set; }
 
         /// <inheritdoc />
-        public override TimeSpan Duration => CurrentActivity?.Duration ?? DateTimeOffset.UtcNow - StartTime;
+        public override TimeSpan Duration => this.CurrentActivity?.Duration ?? DateTimeOffset.UtcNow - this.StartTime;
 
         /// <inheritdoc />
-        public override string TelemetryId
-        {
-            get
-            {
-                if (CurrentActivity == null)
-                {
-                    var traceParent = TraceParentObject.Create(TraceParent);
+        public override string TelemetryId {
+            get {
+                if (this.CurrentActivity == null) {
+                    var traceParent = TraceParentObject.Create(this.TraceParent);
                     return traceParent.SpanId;
-                }
-                else
-                {
-                    return CurrentActivity.SpanId.ToHexString();
+                } else {
+                    return this.CurrentActivity.SpanId.ToHexString();
                 }
             }
         }
 
         /// <inheritdoc />
-        public override string TelemetryContextOperationId => CurrentActivity?.RootId ??
-                    TraceParentObject.Create(TraceParent).TraceId;
+        public override string TelemetryContextOperationId => this.CurrentActivity?.RootId ??
+                    TraceParentObject.Create(this.TraceParent).TraceId;
 
         /// <inheritdoc />
         public override string TelemetryContextOperationParentId {
-            get
-            {
-                if (CurrentActivity == null)
-                {
-                    return ParentSpanId;
-                }
-                else
-                {
-                    return CurrentActivity.ParentSpanId.ToHexString();
+            get {
+                if (this.CurrentActivity == null) {
+                    return this.ParentSpanId;
+                } else {
+                    return this.CurrentActivity.ParentSpanId.ToHexString();
                 }
             }
         }
 
         /// <inheritdoc />
-        public override void SetParentAndStart(TraceContextBase parentTraceContext)
-        {
-            if (CurrentActivity == null)
-            {
-                CurrentActivity = new Activity(this.OperationName);
-                CurrentActivity.SetIdFormat(ActivityIdFormat.W3C);
+        public override void SetParentAndStart(TraceContextBase parentTraceContext) {
+            if (this.CurrentActivity == null) {
+                this.CurrentActivity = new Activity(this.OperationName);
+                this.CurrentActivity.SetIdFormat(ActivityIdFormat.W3C);
             }
 
-            if (parentTraceContext is W3CTraceContext)
-            {
+            if (parentTraceContext is W3CTraceContext) {
                 var context = (W3CTraceContext)parentTraceContext;
-                CurrentActivity.SetParentId(context.TraceParent);
-                CurrentActivity.TraceStateString = context.TraceState;
-                OrchestrationTraceContexts = context.OrchestrationTraceContexts.Clone();
-            } 
+                this.CurrentActivity.SetParentId(context.TraceParent);
+                this.CurrentActivity.TraceStateString = context.TraceState;
+                this.OrchestrationTraceContexts = context.OrchestrationTraceContexts.Clone();
+            }
 
-            CurrentActivity.Start();
+            this.CurrentActivity.Start();
 
-            StartTime = CurrentActivity.StartTimeUtc;
-            TraceParent = CurrentActivity.Id;
-            TraceState = CurrentActivity.TraceStateString;
-            ParentSpanId = CurrentActivity.ParentSpanId.ToHexString();
+            this.StartTime = this.CurrentActivity.StartTimeUtc;
+            this.TraceParent = this.CurrentActivity.Id;
+            this.TraceState = this.CurrentActivity.TraceStateString;
+            this.ParentSpanId = this.CurrentActivity.ParentSpanId.ToHexString();
 
             CorrelationTraceContext.Current = this;
         }
 
         /// <inheritdoc />
-        public override void StartAsNew()
-        {
-            CurrentActivity = new Activity(this.OperationName);
-            CurrentActivity.SetIdFormat(ActivityIdFormat.W3C);
-            CurrentActivity.Start();
+        public override void StartAsNew() {
+            this.CurrentActivity = new Activity(this.OperationName);
+            this.CurrentActivity.SetIdFormat(ActivityIdFormat.W3C);
+            this.CurrentActivity.Start();
 
-            StartTime = CurrentActivity.StartTimeUtc;
+            this.StartTime = this.CurrentActivity.StartTimeUtc;
 
-            TraceParent = CurrentActivity.Id;
+            this.TraceParent = this.CurrentActivity.Id;
 
-            CurrentActivity.TraceStateString = TraceState;
-            TraceState = CurrentActivity.TraceStateString;
-            ParentSpanId = CurrentActivity.ParentSpanId.ToHexString();
+            this.CurrentActivity.TraceStateString = this.TraceState;
+            this.TraceState = this.CurrentActivity.TraceStateString;
+            this.ParentSpanId = this.CurrentActivity.ParentSpanId.ToHexString();
 
             CorrelationTraceContext.Current = this;
         }
     }
 
-    internal class TraceParentObject
-    {
+    internal class TraceParentObject {
         public string Version { get; set; }
 
         public string TraceId { get; set; }
@@ -138,18 +119,14 @@ namespace DurableTask.Core
 
         public string TraceFlags { get; set; }
 
-        public static TraceParentObject Create(string traceParent)
-        {
-            if (!string.IsNullOrEmpty(traceParent))
-            {
+        public static TraceParentObject Create(string traceParent) {
+            if (!string.IsNullOrEmpty(traceParent)) {
                 var substrings = traceParent.Split('-');
-                if (substrings.Length != 4)
-                {
+                if (substrings.Length != 4) {
                     throw new ArgumentException($"Traceparent doesn't respect the spec. {traceParent}");
                 }
 
-                return new TraceParentObject
-                {
+                return new TraceParentObject {
                     Version = substrings[0],
                     TraceId = substrings[1],
                     SpanId = substrings[2],

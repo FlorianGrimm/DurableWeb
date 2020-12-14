@@ -31,9 +31,9 @@ namespace DurableTask.Core.History
         public SubOrchestrationInstanceFailedEvent(int eventId, int taskScheduledId, string reason, string details)
             : base(eventId)
         {
-            TaskScheduledId = taskScheduledId;
-            Reason = reason;
-            Details = details;
+            this.TaskScheduledId = taskScheduledId;
+            this.Reason = reason;
+            this.Details = details;
         }
 
         /// <summary>

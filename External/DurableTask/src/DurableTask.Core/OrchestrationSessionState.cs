@@ -36,7 +36,7 @@ namespace DurableTask.Core
         /// /// <param name="events">A list of history events.</param>
         public OrchestrationSessionState(IList<HistoryEvent> events)
         {
-            Events = events;
+            this.Events = events;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace DurableTask.Core
         /// /// <param name="blobKey">The blob key to access the blob</param>
         public OrchestrationSessionState(string blobKey)
         {
-            BlobKey = blobKey;
+            this.BlobKey = blobKey;
         }
 
         /// <summary>

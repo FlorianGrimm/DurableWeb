@@ -73,7 +73,7 @@ namespace DurableTask.Core
         /// </summary>
         protected TaskOrchestration()
         {
-            DataConverter = new JsonDataConverter();
+            this.DataConverter = new JsonDataConverter();
         }
 
         /// <summary>
@@ -89,19 +89,19 @@ namespace DurableTask.Core
         /// <returns>Serialized output from the execution</returns>
         public override async Task<string> Execute(OrchestrationContext context, string input)
         {
-            var parameter = DataConverter.Deserialize<TInput>(input);
+            var parameter = this.DataConverter.Deserialize<TInput>(input);
             TResult result;
             try
             {
-                result = await RunTask(context, parameter);
+                result = await this.RunTask(context, parameter);
             }
             catch (Exception e) when (!Utils.IsFatal(e) && !Utils.IsExecutionAborting(e))
             {
-                string details = Utils.SerializeCause(e, DataConverter);
+                string details = Utils.SerializeCause(e, this.DataConverter);
                 throw new OrchestrationFailureException(e.Message, details);
             }
 
-            return DataConverter.Serialize(result);
+            return this.DataConverter.Serialize(result);
         }
 
         /// <summary>
@@ -112,8 +112,8 @@ namespace DurableTask.Core
         /// <param name="input">The serialized input</param>
         public override void RaiseEvent(OrchestrationContext context, string name, string input)
         {
-            var parameter = DataConverter.Deserialize<TEvent>(input);
-            OnEvent(context, name, parameter);
+            var parameter = this.DataConverter.Deserialize<TEvent>(input);
+            this.OnEvent(context, name, parameter);
         }
 
         /// <summary>
@@ -122,8 +122,8 @@ namespace DurableTask.Core
         /// <returns>The string status</returns>
         public override string GetStatus()
         {
-            TStatus status = OnGetStatus();
-            return DataConverter.Serialize(status);
+            TStatus status = this.OnGetStatus();
+            return this.DataConverter.Serialize(status);
         }
 
         /// <summary>

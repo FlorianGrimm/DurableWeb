@@ -18,7 +18,7 @@ namespace ImpromptuInterface
         /// <param name="name">The name.</param>
         public AliasAttribute(string name)
         {
-            _name = name;
+            this._name = name;
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace ImpromptuInterface
         /// </value>
         public string Name
         {
-            get { return _name; }
+            get { return this._name; }
 
         }
     }

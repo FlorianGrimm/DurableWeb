@@ -27,14 +27,14 @@ namespace ImpromptuInterface.Optimization
 
         protected BinderHash(Type delegateType, String_OR_InvokeMemberName name, Type context, string[] argNames, Type binderType, bool staticContext, bool isEvent, bool knownBinder)
         {
-            KnownBinder = knownBinder;
-            BinderType = binderType;
-            StaticContext = staticContext;
-            DelegateType = delegateType;
-            Name = name;
-            Context = context;
-            ArgNames = argNames;
-            IsEvent = isEvent;
+            this.KnownBinder = knownBinder;
+            this.BinderType = binderType;
+            this.StaticContext = staticContext;
+            this.DelegateType = delegateType;
+            this.Name = name;
+            this.Context = context;
+            this.ArgNames = argNames;
+            this.IsEvent = isEvent;
 
         }
 
@@ -59,17 +59,17 @@ namespace ImpromptuInterface.Optimization
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            var tArgNames = ArgNames;
+            var tArgNames = this.ArgNames;
             var tOtherArgNames = other.ArgNames;
 
             return
                 !(tOtherArgNames == null ^ tArgNames == null)
-                && other.IsEvent == IsEvent
-                && other.StaticContext == StaticContext
-                && Equals(other.Context, Context)
-                && (KnownBinder || Equals(other.BinderType, BinderType))
-                && Equals(other.DelegateType, DelegateType)
-                && Equals(other.Name, Name)
+                && other.IsEvent == this.IsEvent
+                && other.StaticContext == this.StaticContext
+                && Equals(other.Context, this.Context)
+                && (this.KnownBinder || Equals(other.BinderType, this.BinderType))
+                && Equals(other.DelegateType, this.DelegateType)
+                && Equals(other.Name, this.Name)
                 && (tArgNames == null
                 // ReSharper disable AssignNullToNotNullAttribute
                 //Exclusive Or Makes Sure this doesn't happen
@@ -84,20 +84,20 @@ namespace ImpromptuInterface.Optimization
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (!(obj is BinderHash)) return false;
-            return Equals((BinderHash) obj);
+            return this.Equals((BinderHash) obj);
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                var tArgNames = ArgNames;
+                var tArgNames = this.ArgNames;
 
                 int result = (tArgNames == null ? 0 : tArgNames.Length * 397);
-                result = (result  ^ StaticContext.GetHashCode());
-                result = (result * 397) ^ DelegateType.GetHashCode();
-                result = (result * 397) ^ Context.GetHashCode();
-                result = (result * 397) ^ Name.GetHashCode();
+                result = (result  ^ this.StaticContext.GetHashCode());
+                result = (result * 397) ^ this.DelegateType.GetHashCode();
+                result = (result * 397) ^ this.Context.GetHashCode();
+                result = (result * 397) ^ this.Name.GetHashCode();
                 return result;
             }
         }
@@ -132,16 +132,16 @@ namespace ImpromptuInterface.Optimization
                 if (other is BinderHash<T>)
                 {
                     return 
-                           !(other.ArgNames == null ^ ArgNames == null)
-                           && other.IsEvent == IsEvent
-                           && other.StaticContext == StaticContext
-                           && (KnownBinder || Equals(other.BinderType, BinderType))
-                           && Equals(other.Context, Context)
-                           && Equals(other.Name, Name)
-                           && (ArgNames == null
+                           !(other.ArgNames == null ^ this.ArgNames == null)
+                           && other.IsEvent == this.IsEvent
+                           && other.StaticContext == this.StaticContext
+                           && (this.KnownBinder || Equals(other.BinderType, this.BinderType))
+                           && Equals(other.Context, this.Context)
+                           && Equals(other.Name, this.Name)
+                           && (this.ArgNames == null
                             // ReSharper disable AssignNullToNotNullAttribute
                                  //Exclusive Or Makes Sure this doesn't happen
-                                 || other.ArgNames.SequenceEqual(ArgNames));
+                                 || other.ArgNames.SequenceEqual(this.ArgNames));
                             // ReSharper restore AssignNullToNotNullAttribute
                 }
                 return false;

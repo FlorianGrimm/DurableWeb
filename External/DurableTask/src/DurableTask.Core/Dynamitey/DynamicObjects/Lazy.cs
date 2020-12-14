@@ -77,7 +77,7 @@ namespace Dynamitey.DynamicObjects
         /// </returns>
         public override IEnumerable<string> GetDynamicMemberNames()
         {
-            return ((System.Lazy<T>)Target).IsValueCreated 
+            return ((System.Lazy<T>)this.Target).IsValueCreated 
                 ? base.GetDynamicMemberNames() 
                 : Enumerable.Empty<string>();
         }
@@ -88,6 +88,6 @@ namespace Dynamitey.DynamicObjects
         /// <value>
         /// The call target.
         /// </value>
-        protected override object CallTarget => ((System.Lazy<T>) Target).Value;
+        protected override object CallTarget => ((System.Lazy<T>)this.Target).Value;
     }
 }

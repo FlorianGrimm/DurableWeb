@@ -29,7 +29,7 @@ namespace DurableTask.Core.History
         public HistoryStateEvent(int eventId, OrchestrationState state)
             : base(eventId)
         {
-            State = state;
+            this.State = state;
         }
 
         /// <summary>

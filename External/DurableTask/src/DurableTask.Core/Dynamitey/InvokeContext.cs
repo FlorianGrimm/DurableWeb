@@ -103,9 +103,9 @@ namespace Dynamitey
             {
                 context = context.GetType();
             }
-            Target = target;
-            Context = ((Type)context) ?? target;
-            StaticContext = staticContext;
+            this.Target = target;
+            this.Context = ((Type)context) ?? target;
+            this.StaticContext = staticContext;
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace Dynamitey
                 context = context.GetType();
             }
 
-            Context = (Type)context;
+            this.Context = (Type)context;
         }
     }
 }

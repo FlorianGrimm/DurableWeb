@@ -33,8 +33,8 @@ namespace ImpromptuInterface.Build
         /// <param name="context">The context.</param>
         public ActLikeProxyAttribute(Type[] interfaces, Type context)
         {
-            Interfaces = interfaces;
-            Context = context;
+            this.Interfaces = interfaces;
+            this.Context = context;
         }
 
         /// <summary>

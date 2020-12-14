@@ -50,7 +50,7 @@ namespace Dynamitey.DynamicObjects
         /// Gets the count.
         /// </summary>
         /// <value>The count.</value>
-        public int Count => _dictionary.Count;
+        public int Count => this._dictionary.Count;
 
 
         /// <summary>
@@ -59,12 +59,12 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
         {
-           return _dictionary.GetEnumerator();
+           return this._dictionary.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
 
         /// <summary>
@@ -72,14 +72,14 @@ namespace Dynamitey.DynamicObjects
         /// </summary>
         public void Clear()
         {
-            var tKeys = Keys;
-           
+            var tKeys = this.Keys;
 
-            _dictionary.Clear();
+
+            this._dictionary.Clear();
 
             foreach (var tKey in tKeys)
             {
-                OnPropertyChanged(tKey);
+                this.OnPropertyChanged(tKey);
             }
         }
 
@@ -89,8 +89,8 @@ namespace Dynamitey.DynamicObjects
         /// <value></value>
         public object this[string key]
         {
-            get => _dictionary[key];
-            set => SetProperty(key, value);
+            get => this._dictionary[key];
+            set => this.SetProperty(key, value);
         }
     }
 
@@ -132,13 +132,13 @@ namespace Dynamitey.DynamicObjects
 				return true;
 			}
 			if(binder.CallInfo.ArgumentCount ==1){
-					SetProperty(binder.Name, args.FirstOrDefault());
+                this.SetProperty(binder.Name, args.FirstOrDefault());
 				result = this;
 				return true;
 			}
             if (binder.CallInfo.ArgumentCount > 1)
             {
-                SetProperty(binder.Name,new List(args));
+                this.SetProperty(binder.Name,new List(args));
                 result = this;
                 return true;
             }

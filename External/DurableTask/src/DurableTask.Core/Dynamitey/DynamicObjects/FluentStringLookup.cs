@@ -24,7 +24,7 @@ namespace Dynamitey.DynamicObjects
         /// <param name="lookup">The lookup.</param>
         public FluentStringLookup(Func<string,dynamic> lookup)
         {
-            _lookup = lookup;
+            this._lookup = lookup;
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Dynamitey.DynamicObjects
         /// <returns></returns>
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
-            result = _lookup(binder.Name);
+            result = this._lookup(binder.Name);
             return true;
         }
 
@@ -52,7 +52,7 @@ namespace Dynamitey.DynamicObjects
             result = null;
             if (args.Length == 1 && args.First() is String)
             {
-                result = _lookup(args[0] as String);
+                result = this._lookup(args[0] as String);
                 return true;
             }
             return false;

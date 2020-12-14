@@ -20,7 +20,7 @@ namespace DurableTask.Core.Command
     {
         public OrchestrationCompleteOrchestratorAction()
         {
-            CarryoverEvents = new List<HistoryEvent>();
+            this.CarryoverEvents = new List<HistoryEvent>();
         }
 
         public OrchestrationStatus OrchestrationStatus;

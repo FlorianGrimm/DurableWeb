@@ -57,7 +57,7 @@ namespace DurableTask.Core.Exceptions
         public NonDeterministicOrchestrationException(int eventId, string eventDetails)
             : base("Non-Deterministic workflow detected: " + eventDetails)
         {
-            EventId = eventId;
+            this.EventId = eventId;
         }
 
         /// <summary>

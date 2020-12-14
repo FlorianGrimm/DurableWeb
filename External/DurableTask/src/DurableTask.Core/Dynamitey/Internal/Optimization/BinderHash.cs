@@ -26,32 +26,32 @@ namespace Dynamitey.Internal.Optimization
 
         protected BinderHash(Type delegateType, String name, Type context, string[] argNames, Type binderType, bool staticContext, bool isEvent, bool knownBinder)
         {
-            KnownBinder = knownBinder;
-            BinderType = binderType;
-            StaticContext = staticContext;
-            DelegateType = delegateType;
-            Name = name;
-            IsSpecialName = false;
-            GenericArgs = null;
-            Context = context;
-            ArgNames = argNames;
-            IsEvent = isEvent;
+            this.KnownBinder = knownBinder;
+            this.BinderType = binderType;
+            this.StaticContext = staticContext;
+            this.DelegateType = delegateType;
+            this.Name = name;
+            this.IsSpecialName = false;
+            this.GenericArgs = null;
+            this.Context = context;
+            this.ArgNames = argNames;
+            this.IsEvent = isEvent;
             
 
         }
 
         protected BinderHash(Type delegateType, InvokeMemberName name, Type context, string[] argNames, Type binderType, bool staticContext, bool isEvent, bool knownBinder)
         {
-            KnownBinder = knownBinder;
-            BinderType = binderType;
-            StaticContext = staticContext;
-            DelegateType = delegateType;
-            Name = name.Name;
-            IsSpecialName = name.IsSpecialName;
-            GenericArgs = name.GenericArgs;
-            Context = context;
-            ArgNames = argNames;
-            IsEvent = isEvent;
+            this.KnownBinder = knownBinder;
+            this.BinderType = binderType;
+            this.StaticContext = staticContext;
+            this.DelegateType = delegateType;
+            this.Name = name.Name;
+            this.IsSpecialName = name.IsSpecialName;
+            this.GenericArgs = name.GenericArgs;
+            this.Context = context;
+            this.ArgNames = argNames;
+            this.IsEvent = isEvent;
 
 
         }
@@ -75,21 +75,21 @@ namespace Dynamitey.Internal.Optimization
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            var tArgNames = ArgNames;
+            var tArgNames = this.ArgNames;
             var tOtherArgNames = other.ArgNames;
-            var tGenArgs = GenericArgs;
+            var tGenArgs = this.GenericArgs;
             var tOtherGenArgs = other.GenericArgs;
 
             return
                 !(tOtherArgNames == null && tArgNames != null)
                 && !(tArgNames == null && tOtherArgNames != null)
-                && other.IsEvent == IsEvent
-                && other.StaticContext == StaticContext
-                && other.Context == Context
-                && (KnownBinder || other.BinderType == BinderType)
-                && other.DelegateType == DelegateType
-                && Equals(other.Name, Name)
-                && !(other.IsSpecialName ^ IsSpecialName)
+                && other.IsEvent == this.IsEvent
+                && other.StaticContext == this.StaticContext
+                && other.Context == this.Context
+                && (this.KnownBinder || other.BinderType == this.BinderType)
+                && other.DelegateType == this.DelegateType
+                && Equals(other.Name, this.Name)
+                && !(other.IsSpecialName ^ this.IsSpecialName)
                 && !(tOtherGenArgs == null && tGenArgs != null)
                 && !(tGenArgs == null && tOtherGenArgs != null)
                 && (tOtherGenArgs == null || tOtherGenArgs.SequenceEqual(tGenArgs))
@@ -102,20 +102,20 @@ namespace Dynamitey.Internal.Optimization
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (!(obj is BinderHash)) return false;
-            return Equals((BinderHash) obj);
+            return this.Equals((BinderHash) obj);
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                var tArgNames = ArgNames;
+                var tArgNames = this.ArgNames;
 
                 int result = (tArgNames == null ? 0 : tArgNames.Length * 397);
-                result = (result  ^ StaticContext.GetHashCode());
+                result = (result  ^ this.StaticContext.GetHashCode());
                 //result = (result * 397) ^ DelegateType.GetHashCode();
                 //result = (result * 397) ^ Context.GetHashCode();
-                result = (result * 397) ^ Name.GetHashCode();
+                result = (result * 397) ^ this.Name.GetHashCode();
                 return result;
             }
         }
@@ -150,24 +150,24 @@ namespace Dynamitey.Internal.Optimization
            
                 if (other is BinderHash<T>)
                 {
-                    var tGenArgs = GenericArgs;
+                    var tGenArgs = this.GenericArgs;
                     var tOtherGenArgs = other.GenericArgs;
 
-                    var tArgNames = ArgNames;
+                    var tArgNames = this.ArgNames;
                     var tOtherArgNames = other.ArgNames;
                 return
                            !(tOtherArgNames == null && tArgNames != null)
                            && !(tArgNames == null && tOtherArgNames != null)
-                           && other.IsEvent == IsEvent
-                           && other.StaticContext == StaticContext
-                           && (KnownBinder || other.BinderType == BinderType)
-                           && other.Context == Context
-                           && Equals(other.Name, Name)
-                           && !(other.IsSpecialName ^ IsSpecialName)
+                           && other.IsEvent == this.IsEvent
+                           && other.StaticContext == this.StaticContext
+                           && (this.KnownBinder || other.BinderType == this.BinderType)
+                           && other.Context == this.Context
+                           && Equals(other.Name, this.Name)
+                           && !(other.IsSpecialName ^ this.IsSpecialName)
                            && !(tOtherGenArgs == null && tGenArgs != null)
                            && !(tGenArgs == null && tOtherGenArgs != null)
                            && (tGenArgs == null || tGenArgs.SequenceEqual(tOtherGenArgs))
-                           && (ArgNames == null || other.ArgNames.SequenceEqual(ArgNames));
+                           && (this.ArgNames == null || other.ArgNames.SequenceEqual(this.ArgNames));
                 }
                 return false;
             

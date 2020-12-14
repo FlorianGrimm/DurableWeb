@@ -23,12 +23,12 @@ namespace DurableTask.Core.Settings
         /// </summary>
         public TaskOrchestrationDispatcherSettings()
         {
-            TransientErrorBackOffSecs = FrameworkConstants.OrchestrationTransientErrorBackOffSecs;
-            NonTransientErrorBackOffSecs = FrameworkConstants.OrchestrationNonTransientErrorBackOffSecs;
-            DispatcherCount = FrameworkConstants.OrchestrationDefaultDispatcherCount;
-            MaxConcurrentOrchestrations = FrameworkConstants.OrchestrationDefaultMaxConcurrentItems;
-            CompressOrchestrationState = false;
-            EventBehaviourForContinueAsNew = BehaviorOnContinueAsNew.Carryover;
+            this.TransientErrorBackOffSecs = FrameworkConstants.OrchestrationTransientErrorBackOffSecs;
+            this.NonTransientErrorBackOffSecs = FrameworkConstants.OrchestrationNonTransientErrorBackOffSecs;
+            this.DispatcherCount = FrameworkConstants.OrchestrationDefaultDispatcherCount;
+            this.MaxConcurrentOrchestrations = FrameworkConstants.OrchestrationDefaultMaxConcurrentItems;
+            this.CompressOrchestrationState = false;
+            this.EventBehaviourForContinueAsNew = BehaviorOnContinueAsNew.Carryover;
         }
 
         /// <summary>

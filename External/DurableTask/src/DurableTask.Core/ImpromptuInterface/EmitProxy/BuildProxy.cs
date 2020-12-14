@@ -86,23 +86,23 @@ namespace ImpromptuInterface.Build
             private bool _disposed;
             internal TempBuilder(string name)
             {
-                _name = name;
+                this._name = name;
             }
 
             public void Close()
             {
-                Dispose();
+                this.Dispose();
             }
           
            
             public void Dispose()
             {
-                if (_disposed)
+                if (this._disposed)
                     throw new MethodAccessException("Can't Call Dispose Twice!!");
-                _disposed = true;
+                this._disposed = true;
             
                  
-                   _tempSaveAssembly.Save(string.Format("{0}.dll", _name));
+                   _tempSaveAssembly.Save(string.Format("{0}.dll", this._name));
                
                 _tempSaveAssembly = null;
                 _tempBuilder = null;
@@ -287,21 +287,21 @@ namespace ImpromptuInterface.Build
 
             public MethodSigHash(MethodInfo info)
             {
-                Name = info.Name;
-                Parameters = info.GetParameters().Select(it => it.ParameterType).ToArray();
+                this.Name = info.Name;
+                this.Parameters = info.GetParameters().Select(it => it.ParameterType).ToArray();
             }
 
             public MethodSigHash(string name, Type[] parameters)
             {
-                Name = name;
-                Parameters = parameters;
+                this.Name = name;
+                this.Parameters = parameters;
             }
 
             public bool Equals(MethodSigHash other)
             {
                 if (ReferenceEquals(null, other)) return false;
                 if (ReferenceEquals(this, other)) return true;
-                return Equals(other.Name, Name) && StructuralComparisons.StructuralEqualityComparer.Equals(other.Parameters, Parameters);
+                return Equals(other.Name, this.Name) && StructuralComparisons.StructuralEqualityComparer.Equals(other.Parameters, this.Parameters);
             }
 
             public override bool Equals(object obj)
@@ -309,14 +309,14 @@ namespace ImpromptuInterface.Build
                 if (ReferenceEquals(null, obj)) return false;
                 if (ReferenceEquals(this, obj)) return true;
                 if (obj.GetType() != typeof (MethodSigHash)) return false;
-                return Equals((MethodSigHash) obj);
+                return this.Equals((MethodSigHash) obj);
             }
 
             public override int GetHashCode()
             {
                 unchecked
                 {
-                    return (Name.GetHashCode() * 397) ^ StructuralComparisons.StructuralEqualityComparer.GetHashCode(Parameters);
+                    return (this.Name.GetHashCode() * 397) ^ StructuralComparisons.StructuralEqualityComparer.GetHashCode(this.Parameters);
                 }
             }
         }
@@ -828,9 +828,9 @@ namespace ImpromptuInterface.Build
         {
             public PropertyEmitInfo()
             {
-                CallSiteConvertName = "Convert_Get";
-                CallSiteInvokeGetName = "Invoke_Get";
-                CallSiteInvokeSetName = "Invoke_Set";
+                this.CallSiteConvertName = "Convert_Get";
+                this.CallSiteInvokeGetName = "Invoke_Get";
+                this.CallSiteInvokeSetName = "Invoke_Set";
 
             }
             public string GetName { get; set; }
@@ -865,11 +865,11 @@ namespace ImpromptuInterface.Build
 
             public EmitEventInfo()
             {
-                CallSiteIsEventName = "Invoke_IsEvent";
-                CallSiteAddAssignName = "Invoke_AddAssign";
-                CallSiteSubtractAssignName = "Invoke_SubtractAssign";
-                CallSiteAddName = "Invoke_Add";
-                CallSiteRemoveName = "Invoke_Remove";
+                this.CallSiteIsEventName = "Invoke_IsEvent";
+                this.CallSiteAddAssignName = "Invoke_AddAssign";
+                this.CallSiteSubtractAssignName = "Invoke_SubtractAssign";
+                this.CallSiteAddName = "Invoke_Add";
+                this.CallSiteRemoveName = "Invoke_Remove";
             }
         }
 
@@ -1343,15 +1343,15 @@ namespace ImpromptuInterface.Build
 
             protected EmitInfo()
             {
-                _callSiteName =
+                this._callSiteName =
                     new Lazy<string>(
-                        () => string.Format("Impromptu_Callsite_{1}_{0}", Guid.NewGuid().ToString("N"), Name));
+                        () => string.Format("Impromptu_Callsite_{1}_{0}", Guid.NewGuid().ToString("N"), this.Name));
             }
 
             private readonly Lazy<string> _callSiteName;
             public string CallSiteName
             {
-                get { return _callSiteName.Value; }
+                get { return this._callSiteName.Value; }
             }
             public bool NonRecursive { get; set; }
             public bool DefaultInterfaceImplementation { get; set; }
@@ -1367,8 +1367,8 @@ namespace ImpromptuInterface.Build
         {
             public MethodEmitInfo()
             {
-                CallSiteInvokeName = "Invoke_Method";
-                CallSiteConvertName = "Convert_Method";
+                this.CallSiteInvokeName = "Invoke_Method";
+                this.CallSiteConvertName = "Convert_Method";
             }
 
       

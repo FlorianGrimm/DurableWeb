@@ -32,7 +32,7 @@ namespace Dynamitey.DynamicObjects
         /// <value>
         /// The instance hints.
         /// </value>
-        public IEnumerable<Type> InstanceHints => _instanceHints;
+        public IEnumerable<Type> InstanceHints => this._instanceHints;
 
 
         /// <summary>
@@ -45,9 +45,9 @@ namespace Dynamitey.DynamicObjects
         /// <exception cref="System.ArgumentException">Don't Nest ExtensionToInstance Objects</exception>
         public ExtensionToInstanceProxy(dynamic target,  Type extendedType, Type[] staticTypes, Type[] instanceHints = null):base((object)target)
         {
-            _staticTypes = staticTypes;
-            _extendedType = extendedType;
-            _instanceHints = instanceHints;
+            this._staticTypes = staticTypes;
+            this._extendedType = extendedType;
+            this._instanceHints = instanceHints;
 
             if(target is ExtensionToInstanceProxy)
                 throw new ArgumentException("Don't Nest ExtensionToInstance Objects");
@@ -57,12 +57,12 @@ namespace Dynamitey.DynamicObjects
                 return;
             }
 
-            throw new ArgumentException($"Non a valid {_extendedType} to be wrapped.");
+            throw new ArgumentException($"Non a valid {this._extendedType} to be wrapped.");
             
         }
 
         private object UnwrappedTarget(){
-            return Util.GetTargetContext(CallTarget, out Type _, out bool _);
+            return Util.GetTargetContext(this.CallTarget, out Type _, out bool _);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Dynamitey.DynamicObjects
             if (!base.TryGetMember(binder, out result))
             {
 
-                var tInterface = UnwrappedTarget().GetType().GetTypeInfo().GetInterfaces().Single(it => it.Name == _extendedType.Name);
+                var tInterface = this.UnwrappedTarget().GetType().GetTypeInfo().GetInterfaces().Single(it => it.Name == this._extendedType.Name);
                 var typeInfo = tInterface.GetTypeInfo();
                 result = new Invoker(binder.Name,
                                      typeInfo.IsGenericType ? typeInfo.GetGenericArguments() : new Type[] {},null, this);
@@ -115,11 +115,11 @@ namespace Dynamitey.DynamicObjects
 
             internal Invoker(string name, Type[] genericParameters, Type[] genericMethodParameters, ExtensionToInstanceProxy parent, Type[] overloadTypes = null)
             {
-                Name = name;
-                Parent = parent;
-                GenericParams = genericParameters;
-                GenericMethodParameters = genericMethodParameters;
-                OverloadTypes = new Dictionary<int,Type[]>();
+                this.Name = name;
+                this.Parent = parent;
+                this.GenericParams = genericParameters;
+                this.GenericMethodParameters = genericMethodParameters;
+                this.OverloadTypes = new Dictionary<int,Type[]>();
 
                 if (overloadTypes == null)
                 {
@@ -130,31 +130,31 @@ namespace Dynamitey.DynamicObjects
 
                         if (tNewType.GetTypeInfo().IsGenericType)
                         {
-                            tNewType = tNewType.MakeGenericType(GenericParams);
+                            tNewType = tNewType.MakeGenericType(this.GenericParams);
                         }
 
                         var members = tNewType.GetTypeInfo().GetMethods(BindingFlags.Instance |
                                                                                    BindingFlags.Public).Where(
-                                                                                       it => it.Name == Name).ToList();
+                                                                                       it => it.Name == this.Name).ToList();
                         foreach (var tMethodInfo in members)
                         {
                             var tParams = tMethodInfo.GetParameters().Select(it => it.ParameterType).ToArray();
 
-                            if (OverloadTypes.ContainsKey(tParams.Length))
+                            if (this.OverloadTypes.ContainsKey(tParams.Length))
                             {
-                                OverloadTypes[tParams.Length] = new Type[] {};
+                                this.OverloadTypes[tParams.Length] = new Type[] {};
                             }
                             else
                             {
-                                OverloadTypes[tParams.Length] = tParams.Select(ReplaceGenericTypes).ToArray();
+                                this.OverloadTypes[tParams.Length] = tParams.Select(this.ReplaceGenericTypes).ToArray();
                             }
                         }
 
-                        foreach (var tOverloadType in OverloadTypes.ToList())
+                        foreach (var tOverloadType in this.OverloadTypes.ToList())
                         {
                             if (tOverloadType.Value.Length == 0)
                             {
-                                OverloadTypes.Remove(tOverloadType);
+                                this.OverloadTypes.Remove(tOverloadType);
                             }
                         }
 
@@ -162,7 +162,7 @@ namespace Dynamitey.DynamicObjects
                 }
                 else
                     {
-                        OverloadTypes[overloadTypes.Length] = overloadTypes;
+                    this.OverloadTypes[overloadTypes.Length] = overloadTypes;
                     }
             }
 
@@ -173,7 +173,7 @@ namespace Dynamitey.DynamicObjects
                 {
                     var tArgs = typeInfo.GetGenericArguments();
 
-                    tArgs = tArgs.Select(ReplaceGenericTypes).ToArray();
+                    tArgs = tArgs.Select(this.ReplaceGenericTypes).ToArray();
 
                     return type.GetGenericTypeDefinition().MakeGenericType(tArgs);
                 }
@@ -196,7 +196,7 @@ namespace Dynamitey.DynamicObjects
             {
                 if (binder.Name == "Overloads")
                 {
-                    result = new OverloadInvoker(Name, GenericParams,GenericMethodParameters, Parent);
+                    result = new OverloadInvoker(this.Name, this.GenericParams, this.GenericMethodParameters, this.Parent);
                     return true;
                 }
                 return base.TryGetMember(binder, out result);
@@ -214,16 +214,16 @@ namespace Dynamitey.DynamicObjects
             public override bool TryInvoke(InvokeBinder binder, object[] args, out object result)
             {
                 object[] tArgs = args;
-                if (OverloadTypes.ContainsKey(args.Length))
+                if (this.OverloadTypes.ContainsKey(args.Length))
                 {
-                    tArgs = OverloadTypes[args.Length].Zip(args, Tuple.Create)
+                    tArgs = this.OverloadTypes[args.Length].Zip(args, Tuple.Create)
                         .Select(it => it.Item2 != null ? Dynamic.InvokeConvert(it.Item2, it.Item1, @explicit: true) : null).ToArray();
                     
                 }
 
-                var name = InvokeMemberName.Create(Name, GenericMethodParameters);
+                var name = InvokeMemberName.Create(this.Name, this.GenericMethodParameters);
 
-                result = Parent.InvokeStaticMethod(name, tArgs);
+                result = this.Parent.InvokeStaticMethod(name, tArgs);
                 return true;
             }
 
@@ -236,7 +236,7 @@ namespace Dynamitey.DynamicObjects
             /// <returns></returns>
             public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result)
             {
-                result = new Invoker(Name, GenericParams, indexes.Select(it => Dynamic.InvokeConvert(it, typeof(Type), @explicit: true)).Cast<Type>().ToArray(), Parent);
+                result = new Invoker(this.Name, this.GenericParams, indexes.Select(it => Dynamic.InvokeConvert(it, typeof(Type), @explicit: true)).Cast<Type>().ToArray(), this.Parent);
                 return true;
             }
         }
@@ -261,7 +261,7 @@ namespace Dynamitey.DynamicObjects
             /// <returns></returns>
             public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result)
             {
-                result = new Invoker(Name, GenericParams, GenericMethodParameters, Parent, indexes.Select(it => Dynamic.InvokeConvert(it, typeof(Type), @explicit: true)).Cast<Type>().ToArray());
+                result = new Invoker(this.Name, this.GenericParams, this.GenericMethodParameters, this.Parent, indexes.Select(it => Dynamic.InvokeConvert(it, typeof(Type), @explicit: true)).Cast<Type>().ToArray());
                 return true;
             }
         }
@@ -297,7 +297,7 @@ namespace Dynamitey.DynamicObjects
                 }
 
                 var name=InvokeMemberName.Create;
-                result = InvokeStaticMethod(name(binder.Name, types), args);
+                result = this.InvokeStaticMethod(name(binder.Name, types), args);
             }
             return true;
         }
@@ -313,7 +313,7 @@ namespace Dynamitey.DynamicObjects
             var staticType = InvokeContext.CreateStatic;
             var nameArgs = InvokeMemberName.Create;
 
-            var tList = new List<object> { UnwrappedTarget() };
+            var tList = new List<object> { this.UnwrappedTarget() };
             tList.AddRange(args);
 
             object result =null;
@@ -323,7 +323,7 @@ namespace Dynamitey.DynamicObjects
             var tGenericPossibles = new List<Type[]>();
             if (name.GenericArgs != null && name.GenericArgs.Length > 0)
             {
-                var tInterface = UnwrappedTarget().GetType().GetTypeInfo().GetInterfaces().Single(it => it.Name == _extendedType.Name);
+                var tInterface = this.UnwrappedTarget().GetType().GetTypeInfo().GetInterfaces().Single(it => it.Name == this._extendedType.Name);
                 var tTypeGenerics = (tInterface.GetTypeInfo().IsGenericType ? tInterface.GetTypeInfo().GetGenericArguments()
                                             : new Type[] { }).Concat(name.GenericArgs).ToArray();
 
@@ -337,7 +337,7 @@ namespace Dynamitey.DynamicObjects
                       
 
 
-            foreach (var sType in _staticTypes)
+            foreach (var sType in this._staticTypes)
             {
                 foreach (var tGenericPossible in tGenericPossibles)
                 {
@@ -363,7 +363,7 @@ namespace Dynamitey.DynamicObjects
             }
 
 
-            if (TryTypeForName(name.Name, out var tOutType))
+            if (this.TryTypeForName(name.Name, out var tOutType))
             {
                 var outTypeInfo = tOutType.GetTypeInfo();
                 if (outTypeInfo.IsInterface)
@@ -374,18 +374,18 @@ namespace Dynamitey.DynamicObjects
                         tOutType = tOutType.GetGenericTypeDefinition();
                     }
 
-                    if (InstanceHints.Select(it => tIsGeneric && it.GetTypeInfo().IsGenericType ? it.GetGenericTypeDefinition() : it)
+                    if (this.InstanceHints.Select(it => tIsGeneric && it.GetTypeInfo().IsGenericType ? it.GetGenericTypeDefinition() : it)
                             .Any(it=> it.Name == tOutType.Name))
                     { 
-                        result = CreateSelf(result, _extendedType, _staticTypes, _instanceHints);
+                        result = this.CreateSelf(result, this._extendedType, this._staticTypes, this._instanceHints);
                     }
                 }
             }
             else
             {
-                if (IsExtendedType(result))
+                if (this.IsExtendedType(result))
                 {
-                    result = CreateSelf(result, _extendedType, _staticTypes, _instanceHints);
+                    result = this.CreateSelf(result, this._extendedType, this._staticTypes, this._instanceHints);
                 }
             }
 
@@ -413,10 +413,10 @@ namespace Dynamitey.DynamicObjects
                 return false;
             }
 
-            bool genericDef = _extendedType.GetTypeInfo().IsGenericTypeDefinition;
+            bool genericDef = this._extendedType.GetTypeInfo().IsGenericTypeDefinition;
 
             return target.GetType().GetTypeInfo().GetInterfaces().Any(
-                it => ((genericDef && it.GetTypeInfo().IsGenericType) ? it.GetGenericTypeDefinition() : it).Name == _extendedType.Name);
+                it => ((genericDef && it.GetTypeInfo().IsGenericType) ? it.GetGenericTypeDefinition() : it).Name == this._extendedType.Name);
 
         }
 

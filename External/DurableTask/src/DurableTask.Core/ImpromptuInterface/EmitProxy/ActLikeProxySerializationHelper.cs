@@ -39,9 +39,9 @@ namespace ImpromptuInterface.Build
         /// <exception cref="T:System.Security.SecurityException">The caller does not have the required permission. The call will not work on a medium trusted server.</exception>
         public object GetRealObject(StreamingContext context)
         {
-		   var tInterfaces = Interfaces ?? MonoInterfaces.Select(it=>Type.GetType(it)).ToArray();
-           var tType =BuildProxy.BuildType(Context, tInterfaces.First(), tInterfaces.Skip(1).ToArray());
-           return Impromptu.InitializeProxy(tType, Original, tInterfaces);
+		   var tInterfaces = this.Interfaces ?? this.MonoInterfaces.Select(it=>Type.GetType(it)).ToArray();
+           var tType =BuildProxy.BuildType(this.Context, tInterfaces.First(), tInterfaces.Skip(1).ToArray());
+           return Impromptu.InitializeProxy(tType, this.Original, tInterfaces);
         }
 
     }

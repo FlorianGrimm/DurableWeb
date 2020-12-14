@@ -56,7 +56,7 @@ namespace DurableTask.Core
 
             if (returnType == typeof(Task))
             {
-                result = InvokeWithRetry<object>(binder.Name, args);
+                result = this.InvokeWithRetry<object>(binder.Name, args);
             }
             else
             {
@@ -71,7 +71,7 @@ namespace DurableTask.Core
                     throw new Exception("Generic Parameters are not equal to 1. Type Name: " + returnType.FullName);
                 }
 
-                MethodInfo invokeMethod = GetType().GetMethod("InvokeWithRetry");
+                MethodInfo invokeMethod = this.GetType().GetMethod("InvokeWithRetry");
 
                 Debug.Assert(invokeMethod != null);
 
